@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Middleware.Api/Middleware.Api.csproj" />
+    <Project Path="src/Middleware.Core/Middleware.Core.csproj" />
+    <Project Path="src/Middleware.Infra/Middleware.Infra.csproj" />
+    <Project Path="src/POS.Simulator/POS.Simulator.csproj" />
+  </Folder>
+</Solution>
