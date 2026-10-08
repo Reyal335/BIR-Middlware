@@ -1,0 +1,2 @@
+namespace Middleware.Infra.Data;
+
