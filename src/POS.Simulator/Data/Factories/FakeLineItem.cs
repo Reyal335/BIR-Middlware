@@ -15,7 +15,7 @@ public sealed class FakeFactoryPosLineItem : Faker<PosLineItems>
     {
         fake = new Faker();
         quantity = fake.Random.Int(1, 10);
-        unitPrice = fake.Random.Long(20, 4000);
+        unitPrice = (double)fake.Finance.Amount(20m, 4000m, 2);
         lineAmount = quantity * unitPrice;
         RuleFor(p => p.LineNo, _ => ++lineNo);
         RuleFor(p => p.Sku, faker => faker.Commerce.ProductName());
