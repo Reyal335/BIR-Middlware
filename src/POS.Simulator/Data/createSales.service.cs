@@ -1,10 +1,12 @@
 namespace POS.Simulator.Data;
 using POS.Simulator.@class;
-public class CreateSalesService
+using POS.Simulator.Data.Factories;
+
+public static class CreateSalesService
 {
-    static IReadOnlyCollection<POSInvoice> CreateOrders ()
+    public static IReadOnlyCollection<POSInvoice> CreateOrders ()
     {
-        var orders = new List<POSInvoice>();
-        return orders;
+        var invoices = new FakeInvoice();
+        return invoices.Generate(1);
     }
 }

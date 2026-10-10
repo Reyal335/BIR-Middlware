@@ -9,9 +9,9 @@ public enum CustomerType
     REGISTERED
 }
 
-public sealed class FakeCustomer : Faker<Customer>
+public sealed class FakeFactoryCustomer : Faker<Customer>
 {
-    public FakeCustomer()
+    public FakeFactoryCustomer()
     {
         RuleFor(c => c.Type, faker => faker.PickRandom<CustomerType>().ToString());
         RuleFor(c => c.RegisteredName, faker => faker.Name.FullName());

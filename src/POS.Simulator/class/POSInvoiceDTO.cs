@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 using Bogus.DataSets;
+using System.Text.Json;
 
 namespace POS.Simulator.@class;
 
@@ -15,6 +16,8 @@ public class POSInvoice
     public string TransactionId { get; set; } = string.Empty;
 
     public string InvoiceType { get; set; } = "SALES_INVOICE";
+
+    public string InvoiceNumber { get; set; } = string.Empty;
 
     public DateTimeOffset TransactionDateTime { get; set; } = new DateTimeOffset();
 
@@ -29,6 +32,11 @@ public class POSInvoice
     public Totals Totals { get; set; } = new Totals();
 
     public Payment Payment { get; set; } = new Payment();
+
+    public override string ToString()
+    {
+        return JsonSerializer.Serialize(this);
+    }
 }
 
 public class Seller
