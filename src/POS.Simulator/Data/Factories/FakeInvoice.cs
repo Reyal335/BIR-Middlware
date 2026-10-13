@@ -33,6 +33,6 @@ public sealed class FakeInvoice : Faker<POSInvoice>
         RuleFor(i => i.Customer, _ => _factoryCustomer.Generate());
 
         // Generate LineItems
-        RuleFor(i => i.LineItems, _ => _factoryPosLineItem.Generate(Random.Shared.Next(1, 100)));
+        RuleFor(i => i.LineItems, _ => _factoryPosLineItem.Generate(Random.Shared.Next(1, 10)));
     }
 }

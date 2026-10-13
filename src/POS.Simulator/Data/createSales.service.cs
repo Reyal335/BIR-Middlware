@@ -4,9 +4,11 @@ using POS.Simulator.Data.Factories;
 
 public static class CreateSalesService
 {
-    public static IReadOnlyCollection<POSInvoice> CreateOrders ()
+    public static POSInvoice CreateOrders ()
     {
-        var invoices = new FakeInvoice();
-        return invoices.Generate(1);
+        var invoice = new FakeInvoice();
+        
+        POSInvoice fakeInvoice = invoice.Generate();
+        return fakeInvoice;
     }
 }

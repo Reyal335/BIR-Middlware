@@ -1,4 +1,13 @@
+using POS.Simulator.@class;
+using POS.Simulator.Data;
+using System.Text;
+using System.Text.Json;
+using System.Net.Http.Json;
+using System.Threading;
+using Microsoft.Extensions.Http;
+
 namespace POS.Simulator;
+
 
 public class Worker(ILogger<Worker> logger) : BackgroundService
 {
@@ -12,5 +21,55 @@ public class Worker(ILogger<Worker> logger) : BackgroundService
             }
             await Task.Delay(1000, stoppingToken);
         }
+    }
+}
+
+public class HttpPostingBackgroundService : BackgroundService
+{
+    private readonly ILogger<HttpPostingBackgroundService> _logger;
+    private readonly IHttpClientFactory _httpClientFactory;
+
+    public HttpPostingBackgroundService(IHttpClientFactory httpClientFactory, ILogger<HttpPostingBackgroundService> logger)
+    {
+        _logger = logger;
+        _httpClientFactory = httpClientFactory;
+    }    
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        _logger.LogInformation("Time hosted service is running");
+        
+        await DoWork(_httpClientFactory, stoppingToken);
+
+        using PeriodicTimer timer = new(TimeSpan.FromSeconds(2));
+        try
+        {
+            while (await timer.WaitForNextTickAsync(stoppingToken))
+            {
+                await DoWork(_httpClientFactory, stoppingToken);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            _logger.LogInformation("Time Hosted Service is stopping");
+        }
+    }
+
+    private async Task DoWork(IHttpClientFactory _httpClientFactory, CancellationToken stoppingToken)
+    {
+        await Task.Delay(TimeSpan.FromSeconds(2));
+
+        POSInvoice Invoice = CreateSalesService.CreateOrders();
+        
+        using StringContent jsonContent = new (
+            JsonSerializer.Serialize(Invoice), Encoding.UTF8, "application/json"
+        );
+        Console.WriteLine("hiii");
+        Console.WriteLine(Invoice);
+        var client = _httpClientFactory.CreateClient("MyApiService");
+
+        var response = await client.PostAsync("Invoice", jsonContent, stoppingToken);
+
+
+        _logger.LogInformation("Time Hosted Service is working");
     }
 }

@@ -53,6 +53,10 @@
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
               "version": "[10.0.12, )"
+            },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[10.0.12, )"
             }
           },
           "imports": [

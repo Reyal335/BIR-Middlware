@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "fF+EjeuK3Bk=",
+  "dgSpecHash": "f8SrYpgfSnk=",
   "success": true,
   "projectFilePath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
   "expectedPackageFiles": [
@@ -22,6 +22,7 @@
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.filesystemglobbing\\10.0.12\\microsoft.extensions.filesystemglobbing.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.hosting\\10.0.12\\microsoft.extensions.hosting.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\10.0.12\\microsoft.extensions.hosting.abstractions.10.0.12.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.http\\10.0.12\\microsoft.extensions.http.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging\\10.0.12\\microsoft.extensions.logging.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.12\\microsoft.extensions.logging.abstractions.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.configuration\\10.0.12\\microsoft.extensions.logging.configuration.10.0.12.nupkg.sha512",

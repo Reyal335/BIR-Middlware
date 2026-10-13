@@ -1,19 +1,12 @@
-// using POS.Simulator;
+using POS.Simulator;
 
-// var builder = Host.CreateApplicationBuilder(args);
-// builder.Services.AddHostedService<Worker>();
+var builder = Host.CreateApplicationBuilder(args);
 
-// var host = builder.Build();
-// host.Run();
-
-using System.Text.Json;
-using POS.Simulator.Data;
-
-var invoice = CreateSalesService.CreateOrders().First();
-
-var options = new JsonSerializerOptions
+builder.Services.AddHttpClient("MyApiService", client =>
 {
-    WriteIndented = true
-};
+    client.BaseAddress = new Uri("http://localhost:5077");
+});
+builder.Services.AddHostedService<HttpPostingBackgroundService>();
 
-Console.WriteLine(JsonSerializer.Serialize(invoice, options));
+var host = builder.Build();
+host.Run();
