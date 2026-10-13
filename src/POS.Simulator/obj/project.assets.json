@@ -641,6 +641,16 @@
             "rid": "win"
           }
         }
+      },
+      "Middleware.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/Middleware.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Middleware.Core.dll": {}
+        }
       }
     }
   },
@@ -1597,13 +1607,19 @@
         "system.diagnostics.eventlog.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "Middleware.Core/1.0.0": {
+      "type": "project",
+      "path": "../Middleware.Core/Middleware.Core.csproj",
+      "msbuildProject": "../Middleware.Core/Middleware.Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
       "Bogus >= 35.6.5",
       "Microsoft.Extensions.Hosting >= 10.0.12",
-      "Microsoft.Extensions.Http >= 10.0.12"
+      "Microsoft.Extensions.Http >= 10.0.12",
+      "Middleware.Core >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -1631,7 +1647,11 @@
         "net10.0": {
           "framework": "net10.0",
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
+              "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

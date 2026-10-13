@@ -7,6 +7,22 @@ using System.Text.Json;
 
 namespace POS.Simulator.@class;
 
+[JsonConverter(typeof(JsonStringEnumConverter<taxType>))]
+public enum taxType
+{
+    ZERO_RATED,
+    VAT_EXEMPT,
+    VAT_EXEMPT_SCPWD
+}
+
+public enum CustomerType
+{
+    WALK_IN,
+    REGISTERED_BUSSINESS,
+    SENIOR_CITIZEN,
+    PWD
+}
+
 public class POSInvoice
 {
     public string PosTerminalId { get; set; } = string.Empty;
@@ -60,7 +76,7 @@ public class Seller
 
 public class Customer
 {
-    public string Type { get; set; } = string.Empty;
+    public CustomerType Type { get; set; }
 
     public string? RegisteredName { get; set; } = null;
 
@@ -85,6 +101,7 @@ public class PosLineItems
 
     public bool Vatable { get; set; } = true;  
 
+    public taxType? TaxType { get; set; }
 }
 
 public class Totals 

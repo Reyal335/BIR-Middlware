@@ -63,11 +63,14 @@ public class HttpPostingBackgroundService : BackgroundService
         using StringContent jsonContent = new (
             JsonSerializer.Serialize(Invoice), Encoding.UTF8, "application/json"
         );
-        Console.WriteLine("hiii");
-        Console.WriteLine(Invoice);
-        var client = _httpClientFactory.CreateClient("MyApiService");
+        string readable = JsonSerializer.Serialize(Invoice, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
+        Console.WriteLine(readable);
+        // var client = _httpClientFactory.CreateClient("MyApiService");
 
-        var response = await client.PostAsync("Invoice", jsonContent, stoppingToken);
+        // var response = await client.PostAsync("Invoice", jsonContent, stoppingToken);
 
 
         _logger.LogInformation("Time Hosted Service is working");

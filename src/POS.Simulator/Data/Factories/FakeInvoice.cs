@@ -15,7 +15,10 @@ public sealed class FakeInvoice : Faker<POSInvoice>
 {
     private static readonly FakeFactorySeller _factorySeller = new ();
     private static readonly FakeFactoryCustomer _factoryCustomer = new ();
-    private static readonly FakeFactoryPosLineItem _factoryPosLineItem = new ();
+
+    // Properties that dictate constraints of other properties in other classes
+    private CustomerType customerType;
+
     public FakeInvoice()
     {
         RuleFor(i => i.PosTerminalId, faker => faker.Random.Replace("POS-###"));
@@ -30,9 +33,13 @@ public sealed class FakeInvoice : Faker<POSInvoice>
         RuleFor(i => i.Seller, _ => _factorySeller.Generate());
 
         // Generate Customer
-        RuleFor(i => i.Customer, _ => _factoryCustomer.Generate());
-
-        // Generate LineItems
-        RuleFor(i => i.LineItems, _ => _factoryPosLineItem.Generate(Random.Shared.Next(1, 10)));
+        RuleFor(i => i.Customer, _ => {
+            Customer customer = _factoryCustomer.Generate();
+            customerType = customer.Type;
+            return customer;
+        });
+        // Generate LineItems — the factory must be built here, inside the rule, so it sees
+        // the customerType set by the Customer rule above (rules only run on Generate()).
+        RuleFor(i => i.LineItems, _ => new FakeFactoryPosLineItem(customerType).Generate(Random.Shared.Next(1, 10)));
     }
 }
