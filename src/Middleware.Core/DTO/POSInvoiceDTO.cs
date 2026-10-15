@@ -5,6 +5,14 @@ using System.Text.Json.Serialization;
 
 namespace Middleware.Core.DTO;
 
+[JsonConverter(typeof(JsonStringEnumConverter<taxType>))]
+public enum taxType
+{
+    ZERO_RATED,
+    VAT_EXEMPT,
+    VAT_EXEMPT_SCPWD
+}
+
 public class POSInvoice
 {
     [JsonPropertyName("PosTerminalId")]
@@ -108,6 +116,9 @@ public class PosLineItems
 
     [JsonPropertyName("Vatable")]
     public Boolean Vatable { get; set; } = true;  
+
+    [JsonPropertyName("TaxType")]
+    public taxType? TaxType { get; set; } = null;  
 
 }
 
