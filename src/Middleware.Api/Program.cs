@@ -1,3 +1,4 @@
+using Middleware.Infra;
 using Middleware.Infra.Data;
 using Middleware.Core.Models;
 
@@ -8,9 +9,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 
-// Database connection string
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddSqlite<AppDb>(connectionString);
+
+builder.Services.AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 

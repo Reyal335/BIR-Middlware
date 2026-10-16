@@ -15,6 +15,7 @@ public enum taxType
     VAT_EXEMPT_SCPWD
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<CustomerType>))]
 public enum CustomerType
 {
     WALK_IN,
@@ -130,4 +131,3 @@ public class Payment {
 
     public double Change { get; set; } = 0;
 }
-

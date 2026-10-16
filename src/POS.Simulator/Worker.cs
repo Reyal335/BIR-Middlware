@@ -67,11 +67,23 @@ public class HttpPostingBackgroundService : BackgroundService
         {
             WriteIndented = true
         });
-        Console.WriteLine(readable);
-        // var client = _httpClientFactory.CreateClient("MyApiService");
+        // Console.WriteLine(readable);
+        var client = _httpClientFactory.CreateClient("MyApiService");
 
-        // var response = await client.PostAsync("Invoice", jsonContent, stoppingToken);
+        var response = await client.PostAsync("Invoice", jsonContent, stoppingToken);
+        var responseBody = await response.Content.ReadAsStringAsync(stoppingToken);
 
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogWarning(
+                "Invoice POST failed with status {StatusCode}: {ResponseBody}",
+                (int)response.StatusCode,
+                responseBody);
+        }
+        else
+        {
+            _logger.LogInformation("Invoice POST succeeded with status {StatusCode}", (int)response.StatusCode);
+        }
 
         _logger.LogInformation("Time Hosted Service is working");
     }
