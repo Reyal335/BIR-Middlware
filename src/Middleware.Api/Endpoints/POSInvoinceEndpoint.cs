@@ -28,7 +28,7 @@ public class InvoiceController(InvoiceIntakeService intakeService, ILogger<Invoi
             WriteIndented = true
         });
         Console.WriteLine(readable);
-        Invoice invoice = Invoice.FromPos(invoice_r);
+        var invoice = Invoice.FromPos(invoice_r);
 
         // Save Invoice to DB
         await intakeService.ReceiveInvocie(invoice);

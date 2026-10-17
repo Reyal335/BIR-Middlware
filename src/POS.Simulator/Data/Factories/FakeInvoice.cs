@@ -3,13 +3,6 @@ using POS.Simulator.@class;
 
 namespace POS.Simulator.Data.Factories;
 
-public enum InvoiceType
-{
-    SALES_INVOICE,
-    SERVICE_INVOICE,
-    CREDIT_NOTE,
-    DEBIT_NOTE
-}
 
 public sealed class FakeInvoice : Faker<POSInvoice>
 {
@@ -24,7 +17,7 @@ public sealed class FakeInvoice : Faker<POSInvoice>
         RuleFor(i => i.PosTerminalId, faker => faker.Random.Replace("POS-###"));
         RuleFor(i => i.StoreCode, faker => faker.Random.Replace("BR-###"));
         RuleFor(i => i.TransactionId, faker => faker.Random.Replace("TXN-########-######"));
-        RuleFor(i => i.InvoiceType, faker => faker.PickRandom<InvoiceType>().ToString());
+        RuleFor(i => i.InvoiceType, faker => faker.PickRandom<InvoiceType>());
         RuleFor(i => i.InvoiceNumber, faker => faker.Random.Replace("SI-####-######"));
         RuleFor(i => i.TransactionDateTime, _ => DateTimeOffset.Now);
         RuleFor(i => i.Cashier, faker => faker.Name.FullName());

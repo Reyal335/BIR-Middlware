@@ -9,5 +9,5 @@ public class InvoiceLine
     public int Quantity { get; init; }
     public decimal UnitPrice { get; init; }
     public decimal LineAmount { get; init; }
-    public TaxClass TaxClass { get; init; }
+    public TaxType TaxType { get; init; }
 }

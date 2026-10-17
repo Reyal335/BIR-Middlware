@@ -8,6 +8,7 @@ namespace Middleware.Core.DTO;
 [JsonConverter(typeof(JsonStringEnumConverter<taxType>))]
 public enum taxType
 {
+    TAX_TYPE,
     ZERO_RATED,
     VAT_EXEMPT,
     VAT_EXEMPT_SCPWD
@@ -106,7 +107,7 @@ public class PosLineItems
     public string? Description { get; set; } = string.Empty; 
 
     [JsonPropertyName("Quantity")]
-    public int? Quantity { get; set; } = 0; 
+    public int Quantity { get; set; } = 0; 
 
     [JsonPropertyName("UnitPrice")]
     public double UnitPrice { get; set; } = 0; 

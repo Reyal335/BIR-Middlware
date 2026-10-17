@@ -94,10 +94,10 @@ public class Invoice
                 LineNo = l.LineNo,
                 Sku = l.SKU,
                 Description = l.Description,
-                Quantity = l.Quantity ?? 0,
+                Quantity = l.Quantity,
                 UnitPrice = (decimal)l.UnitPrice,
                 LineAmount = (decimal)l.LineAmount,
-                TaxClass = ToTaxClass(l.Vatable, l.TaxType),
+                TaxType = ToTaxClass(l.Vatable, l.TaxType),
             });
         }
 
@@ -121,12 +121,12 @@ public class Invoice
         EisUniqueId = eisUniqueId;
     }
 
-    private static TaxClass ToTaxClass(bool vatable, taxType? t) => vatable
-        ? TaxClass.Vatable
+    private static TaxType ToTaxClass(bool vatable, taxType? t) => vatable
+        ? TaxType.VATABLE
         : t switch
         {
-            taxType.ZERO_RATED       => TaxClass.ZeroRated,
-            taxType.VAT_EXEMPT_SCPWD => TaxClass.VatExemptScPwd,
-            _                        => TaxClass.VatExempt,
+            taxType.ZERO_RATED       => TaxType.ZERO_RATED,
+            taxType.VAT_EXEMPT_SCPWD => TaxType.VAT_EXEMPT_SCPWD,
+            _                        => TaxType.VAT_EXEMPT,
         };
 }

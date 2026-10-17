@@ -10,6 +10,7 @@ namespace POS.Simulator.@class;
 [JsonConverter(typeof(JsonStringEnumConverter<taxType>))]
 public enum taxType
 {
+    VATABLE,
     ZERO_RATED,
     VAT_EXEMPT,
     VAT_EXEMPT_SCPWD
@@ -24,6 +25,15 @@ public enum CustomerType
     PWD
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<InvoiceType>))]
+public enum InvoiceType
+{
+    SALES_INVOICE,
+    SERVICE_INVOICE,
+    CREDIT_NOTE,
+    DEBIT_NOTE
+}
+
 public class POSInvoice
 {
     public string PosTerminalId { get; set; } = string.Empty;
@@ -32,7 +42,7 @@ public class POSInvoice
 
     public string TransactionId { get; set; } = string.Empty;
 
-    public string InvoiceType { get; set; } = "SALES_INVOICE";
+    public InvoiceType InvoiceType { get; set; }
 
     public string InvoiceNumber { get; set; } = string.Empty;
 
