@@ -1,0 +1,11 @@
+# Exclude local build and publish artifacts
+**/bin/
+**/obj/
+**/.vs/
+**/.vscode/
+**/*.user
+
+# Exclude source control and IDE settings
+.git/
+.gitignore
+.idea/

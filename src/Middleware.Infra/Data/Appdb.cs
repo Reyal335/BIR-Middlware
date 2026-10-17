@@ -32,7 +32,7 @@ public class AppDb : DbContext
                 l.WithOwner().HasForeignKey("InvoiceId");
                 l.Property<int>("Id");   // shadow key: SQLite can't autogenerate composite keys
                 l.HasKey("Id");
-                l.Property(x => x.TaxClass).HasConversion<string>();
+                l.Property(x => x.TaxType).HasConversion<string>();
             });
             b.Navigation(i => i.Lines).UsePropertyAccessMode(PropertyAccessMode.Field);
         });
