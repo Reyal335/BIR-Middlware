@@ -1,4 +1,7 @@
+using Middleware.Core.Models;
+
 namespace Middleware.Core.Tax;
+
 
 public sealed class LineAmounts
 {
@@ -76,7 +79,6 @@ public sealed class InvoiceTotals
     public decimal ZeroRatedSales { get; init; }
     public decimal VatAmount { get; init; }
     public decimal ScPwdDiscount { get; init; }
-    public decimal OtherDiscount { get; init; }
     public decimal TotalDue { get; init; }
 }
 

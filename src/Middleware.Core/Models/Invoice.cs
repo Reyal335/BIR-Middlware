@@ -36,8 +36,8 @@ public class Invoice
 
     private Invoice() { } // EF only
 
-    // ── Creation: DTO → domain ───────────────────────────
-    public static Invoice FromPos(POSInvoice dto)
+    // ── Creation: DTO -> domain ───────────────────────────
+    public static Invoice FromPos(POSInvoice dto, InvoiceTotals totals)
     {
         var invoice = new Invoice
         {
@@ -66,17 +66,7 @@ public class Invoice
                 Tin = dto.Customer.Tin,
                 Address = dto.Customer.Address,
             },
-            Totals = new InvoiceTotals
-            {
-                GrossAmount = (decimal)dto.Totals.GrossAmount,
-                VatableSales = (decimal)dto.Totals.VatableSales,
-                VatExemptSales = (decimal)dto.Totals.VatExemptSales,
-                ZeroRatedSales = (decimal)dto.Totals.ZeroRelatedSales,
-                VatAmount = (decimal)dto.Totals.VatAmount,
-                ScPwdDiscount = (decimal)dto.Totals.ScPwdDiscount,
-                OtherDiscount = (decimal)dto.Totals.OtherDiscount,
-                TotalDue = (decimal)dto.Totals.TotalDue,
-            },
+            Totals = totals,
             Payment = new PaymentInfo
             {
                 Method = dto.Payment.Method,

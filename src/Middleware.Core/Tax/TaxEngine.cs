@@ -55,7 +55,6 @@ public static class TaxEngine
             VatAmount = VatAmount,
             ScPwdDiscount = ScPwdDiscount,
             TotalDue = TotalDue
-            
         };
         return TaxComputationResult.Succeeded(lines, totals);
     }

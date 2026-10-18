@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Middleware.Core.DTO;
 using Middleware.Core.Models;
 using Middleware.Core.Services;
+using Middleware.Core.Tax;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -34,9 +35,12 @@ public class InvoiceController(InvoiceIntakeService intakeService, ILogger<Invoi
         //     WriteIndented = true
         // });
         // Console.WriteLine(readable);
-
-        var invoice = Invoice.FromPos(invoice_r);
+        var taxComputationResult = TaxEngine.Compute(invoice_r);
+        if (!taxComputationResult.IsSuccess) return UnprocessableEntity(new { Message = "Something went wrong with the calculation" });
+        
+        var invoice = Invoice.FromPos(invoice_r, taxComputationResult.Totals!);
         // Save Invoice to DB
+        
         await intakeService.ReceiveInvocie(invoice);
 
         return Ok(new { message = $"Here is your random word"});
