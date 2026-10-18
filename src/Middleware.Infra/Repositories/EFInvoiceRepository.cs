@@ -18,4 +18,5 @@ public class EFInvoiceRepository(AppDb db) : IInvoiceRepository
     {
         return await _db.Invoice.FindAsync(id);
     }
+
 }

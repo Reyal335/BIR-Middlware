@@ -18,18 +18,24 @@ public class RandomWordDto
 public class InvoiceController(InvoiceIntakeService intakeService, ILogger<InvoiceController> logger) : ControllerBase
 {
 
+    [HttpGet] 
+    public IActionResult TestConnection()
+    {
+        return Ok (new { message = "Server is up and running"});
+    }
+
     [HttpPost]
     public async Task<IActionResult> PostInvoice([FromBody] POSInvoice invoice_r)
     {
         logger.LogInformation("Heelllo its running");
 
-        string readable = JsonSerializer.Serialize(invoice_r, new JsonSerializerOptions
-        {
-            WriteIndented = true
-        });
-        Console.WriteLine(readable);
-        var invoice = Invoice.FromPos(invoice_r);
+        // string readable = JsonSerializer.Serialize(invoice_r, new JsonSerializerOptions
+        // {
+        //     WriteIndented = true
+        // });
+        // Console.WriteLine(readable);
 
+        var invoice = Invoice.FromPos(invoice_r);
         // Save Invoice to DB
         await intakeService.ReceiveInvocie(invoice);
 
