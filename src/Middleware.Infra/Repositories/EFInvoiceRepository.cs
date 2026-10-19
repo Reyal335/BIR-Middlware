@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Middleware.Core.interfaces;
 using Middleware.Core.Models;
 using Middleware.Infra.Data;
@@ -22,7 +23,11 @@ public class EFInvoiceRepository(AppDb db) : IInvoiceRepository
 
     public async Task<List<Invoice>> FindQueuedInvoices()
     {
-        return await _db.Invoice.
+        return await _db.Invoice
+                        .Where(I => I.Status == InvoiceStatus.Accepted)
+                        .Take(100)
+                        .ToListAsync();
+
     }
 
 }
