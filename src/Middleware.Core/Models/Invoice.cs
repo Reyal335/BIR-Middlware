@@ -102,6 +102,7 @@ public class Invoice
         Status = InvoiceStatus.Queued;
     }
 
+    //
     public void ApplyEisResult(bool accepted, string? eisUniqueId)
     {
         if (Status != InvoiceStatus.Queued)

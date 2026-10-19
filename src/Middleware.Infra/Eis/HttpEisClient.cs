@@ -1,6 +1,7 @@
 using Middleware.Core.interfaces;
 using Middleware.Core.Models;
 
+
 namespace Middleware.Infra.Eis;
 
 public class HttpEisClient : IEisClient
