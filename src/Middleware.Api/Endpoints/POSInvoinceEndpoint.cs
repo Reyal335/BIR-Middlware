@@ -38,9 +38,13 @@ public class InvoiceController(InvoiceIntakeService intakeService, ILogger<Invoi
         var taxComputationResult = TaxEngine.Compute(invoice_r);
         if (!taxComputationResult.IsSuccess) return UnprocessableEntity(new { Message = "Something went wrong with the calculation" });
         
+
         var invoice = Invoice.FromPos(invoice_r, taxComputationResult.Totals!);
-        // Save Invoice to DB
         
+        // Queue invoice for EISTransmission worker to build payload
+        invoice.MarkQueued();
+
+        // Save Invoice to DB
         await intakeService.ReceiveInvocie(invoice);
 
         return Ok(new { message = $"Here is your random word"});

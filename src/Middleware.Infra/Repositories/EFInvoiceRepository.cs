@@ -1,6 +1,7 @@
 using Middleware.Core.interfaces;
 using Middleware.Core.Models;
 using Middleware.Infra.Data;
+using System.Linq;
 
 namespace Middleware.Core.Repositories;
 
@@ -17,6 +18,11 @@ public class EFInvoiceRepository(AppDb db) : IInvoiceRepository
     public async Task<Invoice?> FindByIdAsync(Guid id)
     {
         return await _db.Invoice.FindAsync(id);
+    }
+
+    public async Task<List<Invoice>> FindQueuedInvoices()
+    {
+        return await _db.Invoice.
     }
 
 }

@@ -1,6 +1,7 @@
 using Middleware.Infra;
 using Middleware.Infra.Data;
 using Middleware.Core.Models;
+using Middleware.Api.Workers;  
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +12,7 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddInfrastructure(builder.Configuration);
+builder.Services.AddHostedService<EisTransmissionWorker>();   
 
 var app = builder.Build();
 

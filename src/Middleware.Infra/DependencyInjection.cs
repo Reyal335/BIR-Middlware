@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Middleware.Infra.Data;
+
 using Middleware.Core.interfaces;
 using Middleware.Core.Repositories;
 using Middleware.Core.Services;
-
 
 namespace Middleware.Infra;
 
@@ -20,6 +20,7 @@ public static class DependencyInjection
 
         services.AddScoped<InvoiceIntakeService>();
         services.AddScoped<IInvoiceRepository, EFInvoiceRepository>();
+        services.AddScoped<IEisClient>();
         return services;
     }
 }
