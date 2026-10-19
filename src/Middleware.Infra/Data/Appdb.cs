@@ -15,7 +15,7 @@ public class AppDb : DbContext
     {
         modelBuilder.Entity<Invoice>(b =>
         {
-            b.HasKey(i => i.Id);
+            b.HasKey(i => i.EisUniqueId);
             b.HasIndex(i => new { i.StoreCode, i.PosTerminalId, i.InvoiceNumber }).IsUnique();
             b.Property(i => i.Status).HasConversion<string>();
 

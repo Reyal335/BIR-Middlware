@@ -7,7 +7,7 @@ namespace Middleware.Core.Models;
 public class Invoice
 {
     // ── Identity ─────────────────────────────────────────
-    public int Id { get; private set; }
+    public int EISUniqueId { get; private set; }
 
     // ── Header (from the DTO) ────────────────────────────
     public string StoreCode { get; private set; } = "";
@@ -100,6 +100,13 @@ public class Invoice
         if (Status != InvoiceStatus.Received)
             throw new InvalidOperationException($"Cannot queue from {Status}");
         Status = InvoiceStatus.Queued;
+    }
+
+    public void MarkSubmitted()
+    {
+        if (Status != InvoiceStatus.Submitting)
+            throw new InvalidOperationException($"Cannot mark submitted from {Status}");
+        Status = InvoiceStatus.Submitting;
     }
 
     //

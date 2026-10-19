@@ -7,6 +7,6 @@ public enum TaxType {
     VAT_EXEMPT,
     VAT_EXEMPT_SCPWD
 }
-public enum InvoiceStatus { Received, Queued, Accepted, Rejected }    
+public enum InvoiceStatus { Received, Queued, Submitting, Accepted, Rejected }    
 
 
