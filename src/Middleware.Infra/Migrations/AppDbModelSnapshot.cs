@@ -17,6 +17,19 @@ namespace Middleware.Infra.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "10.0.13");
 
+            modelBuilder.Entity("Middleware.Core.Models.EisControlCounters", b =>
+                {
+                    b.Property<int>("LastValue")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasIndex("LastValue");
+
+                    b.ToTable("EisControlCounters");
+                });
+
             modelBuilder.Entity("Middleware.Core.Models.Invoice", b =>
                 {
                     b.Property<int>("Id")
@@ -126,7 +139,7 @@ namespace Middleware.Infra.Migrations
                             b1.Property<string>("Sku")
                                 .HasColumnType("TEXT");
 
-                            b1.Property<string>("TaxClass")
+                            b1.Property<string>("TaxType")
                                 .IsRequired()
                                 .HasColumnType("TEXT");
 

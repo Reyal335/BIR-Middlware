@@ -2,6 +2,7 @@ using Middleware.Infra;
 using Middleware.Infra.Data;
 using Middleware.Core.Models;
 using Middleware.Api.Workers;  
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +16,12 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddHostedService<EisTransmissionWorker>();   
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    scope.ServiceProvider.GetRequiredService<AppDb>().Database.Migrate();
+}
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

@@ -10,12 +10,13 @@ public class AppDb : DbContext
     {
     }
     public DbSet<Invoice> Invoice { get; set; }
+    public DbSet<EisControlCounters> EisControlCounters { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Invoice>(b =>
         {
-            b.HasKey(i => i.EisUniqueId);
+            b.HasKey(i => i.Id);
             b.HasIndex(i => new { i.StoreCode, i.PosTerminalId, i.InvoiceNumber }).IsUnique();
             b.Property(i => i.Status).HasConversion<string>();
 
@@ -35,6 +36,12 @@ public class AppDb : DbContext
                 l.Property(x => x.TaxType).HasConversion<string>();
             });
             b.Navigation(i => i.Lines).UsePropertyAccessMode(PropertyAccessMode.Field);
+        });
+
+        modelBuilder.Entity<EisControlCounters>(e =>
+        {
+            e.HasKey(c => c.Name);
+            e.HasIndex(i => i.LastValue); 
         });
     }
 

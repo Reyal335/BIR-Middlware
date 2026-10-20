@@ -4,6 +4,8 @@ using Middleware.Core.DTO;
 using Middleware.Core.Models;
 using Middleware.Core.Services;
 using Middleware.Core.Tax;
+using Middleware.Core.Eis;
+using Middleware.Core.interfaces;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -16,7 +18,12 @@ public class RandomWordDto
 
 [ApiController]
 [Route("[controller]")]
-public class InvoiceController(InvoiceIntakeService intakeService, ILogger<InvoiceController> logger) : ControllerBase
+public class InvoiceController(
+    InvoiceIntakeService intakeService,
+    ILogger<InvoiceController> logger,
+    TaxEngine taxEngine,
+    EisUniqueIdGenerator idGenerator) : ControllerBase
+
 {
 
     [HttpGet] 
@@ -35,17 +42,20 @@ public class InvoiceController(InvoiceIntakeService intakeService, ILogger<Invoi
         //     WriteIndented = true
         // });
         // Console.WriteLine(readable);
-        var taxComputationResult = TaxEngine.Compute(invoice_r);
+        var taxComputationResult = taxEngine.Compute(invoice_r);
         if (!taxComputationResult.IsSuccess) return UnprocessableEntity(new { Message = "Something went wrong with the calculation" });
         
+        string eisId = await idGenerator.generateEisID();
 
-        var invoice = Invoice.FromPos(invoice_r, taxComputationResult.Totals!);
+        var invoice = Invoice.FromPos(invoice_r, taxComputationResult.Totals!, eisId);
         
+
         // Queue invoice for EISTransmission worker to build payload
         invoice.MarkQueued();
 
         // Save Invoice to DB
         await intakeService.ReceiveInvocie(invoice);
+        
 
         return Ok(new { message = $"Here is your random word"});
     }

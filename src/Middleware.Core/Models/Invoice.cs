@@ -7,7 +7,7 @@ namespace Middleware.Core.Models;
 public class Invoice
 {
     // ── Identity ─────────────────────────────────────────
-    public int EISUniqueId { get; private set; }
+    public int Id { get; private set; }
 
     // ── Header (from the DTO) ────────────────────────────
     public string StoreCode { get; private set; } = "";
@@ -32,12 +32,12 @@ public class Invoice
     public DateTimeOffset ReceivedAt { get; private set; }
     public int AttemptCount { get; private set; }
     public DateTimeOffset? NextRetryAt { get; private set; }
-    public string? EisUniqueId { get; private set; }
+    public required string EisUniqueId { get; init; }
 
     private Invoice() { } // EF only
 
     // ── Creation: DTO -> domain ───────────────────────────
-    public static Invoice FromPos(POSInvoice dto, InvoiceTotals totals)
+    public static Invoice FromPos(POSInvoice dto, InvoiceTotals totals, string eisId)
     {
         var invoice = new Invoice
         {
@@ -48,6 +48,7 @@ public class Invoice
             InvoiceNumber = dto.InvoiceNumber,
             TransactionDateTime = dto.TransactionDateTime,
             Cashier = dto.Cashier,
+            EisUniqueId = eisId,
             Seller = new SellerInfo
             {
                 RegisteredName = dto.Seller.RegisteredName,
@@ -116,7 +117,6 @@ public class Invoice
             throw new InvalidOperationException($"Cannot apply EIS result from {Status}");
         AttemptCount++;
         Status = accepted ? InvoiceStatus.Accepted : InvoiceStatus.Rejected;
-        EisUniqueId = eisUniqueId;
     }
 
     private static TaxType ToTaxClass(bool vatable, taxType? t) => vatable

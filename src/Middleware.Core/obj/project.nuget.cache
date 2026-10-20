@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "1HntqIkj7dE=",
+  "dgSpecHash": "M7ZL/2V08kA=",
   "success": true,
   "projectFilePath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.13\\microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.options\\10.0.13\\microsoft.extensions.options.10.0.13.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.13\\microsoft.extensions.primitives.10.0.13.nupkg.sha512"
+  ],
   "logs": []
 }

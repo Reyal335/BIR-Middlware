@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "s7xl7RpUsag=",
+  "dgSpecHash": "7qbVkWG2tss=",
   "success": true,
   "projectFilePath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
   "expectedPackageFiles": [
@@ -14,7 +14,7 @@
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.configuration.json\\10.0.12\\microsoft.extensions.configuration.json.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.configuration.usersecrets\\10.0.12\\microsoft.extensions.configuration.usersecrets.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.dependencyinjection\\10.0.12\\microsoft.extensions.dependencyinjection.10.0.12.nupkg.sha512",
-    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.12\\microsoft.extensions.dependencyinjection.abstractions.10.0.12.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\10.0.13\\microsoft.extensions.dependencyinjection.abstractions.10.0.13.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.diagnostics\\10.0.12\\microsoft.extensions.diagnostics.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.diagnostics.abstractions\\10.0.12\\microsoft.extensions.diagnostics.abstractions.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.fileproviders.abstractions\\10.0.12\\microsoft.extensions.fileproviders.abstractions.10.0.12.nupkg.sha512",
@@ -30,9 +30,9 @@
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.debug\\10.0.12\\microsoft.extensions.logging.debug.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.eventlog\\10.0.12\\microsoft.extensions.logging.eventlog.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.eventsource\\10.0.12\\microsoft.extensions.logging.eventsource.10.0.12.nupkg.sha512",
-    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.options\\10.0.12\\microsoft.extensions.options.10.0.12.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.options\\10.0.13\\microsoft.extensions.options.10.0.13.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\10.0.12\\microsoft.extensions.options.configurationextensions.10.0.12.nupkg.sha512",
-    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.12\\microsoft.extensions.primitives.10.0.12.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.13\\microsoft.extensions.primitives.10.0.13.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\system.diagnostics.eventlog\\10.0.12\\system.diagnostics.eventlog.10.0.12.nupkg.sha512"
   ],
   "logs": []

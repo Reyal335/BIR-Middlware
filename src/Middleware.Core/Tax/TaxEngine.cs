@@ -6,12 +6,12 @@ using System.Linq;
 namespace Middleware.Core.Tax;
 
 
-public static class TaxEngine
+public class TaxEngine
 {
     const decimal VatDivisor = 1.12m;
     const decimal ScPwdRate = 0.20m;
 
-    public static TaxComputationResult Compute(POSInvoice Invoice)
+    public TaxComputationResult Compute(POSInvoice Invoice)
     {
         var errors = new List<string>();
         var lines = new List<LineAmounts>();

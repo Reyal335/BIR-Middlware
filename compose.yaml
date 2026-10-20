@@ -1,0 +1,16 @@
+services:
+  api:
+    build:
+      context: ./src
+      dockerfile: Middleware.Api/Dockerfile
+    image: my-app-image
+    ports:
+      - "5077:8080"
+    volumes:
+      - bir-eis-data:/app/data
+
+    
+
+volumes:
+  bir-eis-data:
+    name: bir-eis-data

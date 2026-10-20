@@ -15,5 +15,9 @@ RUN dotnet publish "Middleware.Api/Middleware.Api.csproj" -c Release -o /app/pub
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
+RUN mkdir -p /app/data && chown $APP_UID /app/data
+USER $APP_UID
+ENV ConnectionStrings__DefaultConnection="Data Source=/app/data/App.db"
+EXPOSE 8080
 COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "Middleware.Api.dll"]
