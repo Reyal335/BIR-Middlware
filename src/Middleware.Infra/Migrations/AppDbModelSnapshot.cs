@@ -19,11 +19,13 @@ namespace Middleware.Infra.Migrations
 
             modelBuilder.Entity("Middleware.Core.Models.EisControlCounters", b =>
                 {
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("LastValue")
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("TEXT");
+                    b.HasKey("Name");
 
                     b.HasIndex("LastValue");
 
@@ -44,6 +46,7 @@ namespace Middleware.Infra.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<string>("EisUniqueId")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<string>("InvoiceNumber")

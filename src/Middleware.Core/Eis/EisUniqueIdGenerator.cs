@@ -7,9 +7,7 @@ public class EisUniqueIdGenerator(string CertificationNumber, IEisControlSequenc
 {
     public async Task<string> generateEisID()
     {
-        DateOnly pureDate = DateOnly.FromDateTime(DateTime.Today);
-        string isoFormat = pureDate.ToString("yyyy-MM-dd");
-        string idFormat = isoFormat.Replace("-", "");
+        string idFormat = DateTime.UtcNow.AddHours(8).ToString("yyyyMMdd");
 
         int csId = await controlSequence.NextAsync();
 
