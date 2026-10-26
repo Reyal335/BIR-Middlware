@@ -8,6 +8,7 @@ public class InvoiceTotals
     public decimal ZeroRatedSales { get; init; }
     public decimal VatAmount { get; init; }
     public decimal ScPwdDiscount { get; init; }
+    public decimal NonVatSales { get; init; }
     public decimal OtherDiscount { get; init; }
     public decimal TotalDue { get; init; }
 }

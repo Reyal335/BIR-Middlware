@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace BirMiddleware.Models.Eis
-{
+namespace Middleware.Core.Eis;
+
     /// <summary>
     /// Shape of the payload your middleware SENDS to the BIR EIS, after transforming
     /// a PosInvoice. Field names/casing here follow the publicly documented EIS shape
@@ -153,4 +153,3 @@ namespace BirMiddleware.Models.Eis
         [JsonPropertyName("Value")]
         public string Value { get; set; } = string.Empty;
     }
-}

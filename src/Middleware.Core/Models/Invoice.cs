@@ -1,6 +1,7 @@
 // Middleware.Core/Models/Invoice.cs
 using Middleware.Core.DTO;
 using Middleware.Core.Models;
+using Middleware.Core.Tax;
 
 namespace Middleware.Core.Models;
 
@@ -33,12 +34,15 @@ public class Invoice
     public int AttemptCount { get; private set; }
     public DateTimeOffset? NextRetryAt { get; private set; }
     public required string EisUniqueId { get; init; }
-
+    public string? SignedJws { get; private set; }
+    public DateTimeOffset? SignedAt { get; private set; }
     private Invoice() { } // EF only
 
     // ── Creation: DTO -> domain ───────────────────────────
-    public static Invoice FromPos(POSInvoice dto, InvoiceTotals totals, string eisId)
+    public static Invoice FromPos(POSInvoice dto, TaxComputationResult tax, string eisId)
     {
+        var computed = tax.Lines.ToDictionary(l => l.LineNo);
+
         var invoice = new Invoice
         {
             StoreCode = dto.StoreCode,
@@ -67,7 +71,7 @@ public class Invoice
                 Tin = dto.Customer.Tin,
                 Address = dto.Customer.Address,
             },
-            Totals = totals,
+            Totals = tax.Totals!,
             Payment = new PaymentInfo
             {
                 Method = dto.Payment.Method,
@@ -80,6 +84,7 @@ public class Invoice
 
         foreach (var l in dto.LineItems)
         {
+            var c = computed[l.LineNo];
             invoice._lines.Add(new InvoiceLine
             {
                 LineNo = l.LineNo,
@@ -89,6 +94,12 @@ public class Invoice
                 UnitPrice = (decimal)l.UnitPrice,
                 LineAmount = (decimal)l.LineAmount,
                 TaxType = ToTaxClass(l.Vatable, l.TaxType),
+                VatableSales = c.VatableSales,
+                VatExemptSales = c.VatExemptSales,
+                ZeroRatedSales = c.ZeroRatedSales,
+                VatAmount = c.VatAmount,
+                ScPwdDiscount = c.ScPwdDiscount,
+                NonVatSales = c.NonVatSales,
             });
         }
 
@@ -105,9 +116,18 @@ public class Invoice
 
     public void MarkSubmitted()
     {
-        if (Status != InvoiceStatus.Submitting)
+        if (Status != InvoiceStatus.Queued)
             throw new InvalidOperationException($"Cannot mark submitted from {Status}");
         Status = InvoiceStatus.Submitting;
+    }
+
+    // Save JWS and time signed at
+    public void AttachSignature(string jws)
+    {
+        if (Status != InvoiceStatus.Submitting)
+            throw new InvalidOperationException($"Cannot mark save jws data from {Status}");
+        SignedJws = jws;
+        SignedAt = DateTimeOffset.Now;
     }
 
     //

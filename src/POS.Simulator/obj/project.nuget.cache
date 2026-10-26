@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "7qbVkWG2tss=",
+  "dgSpecHash": "KXkn8IosNNk=",
   "success": true,
-  "projectFilePath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
+  "projectFilePath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\91460\\.nuget\\packages\\bogus\\35.6.5\\bogus.35.6.5.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.configuration\\10.0.12\\microsoft.extensions.configuration.10.0.12.nupkg.sha512",

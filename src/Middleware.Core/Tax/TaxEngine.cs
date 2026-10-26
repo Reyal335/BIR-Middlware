@@ -38,7 +38,8 @@ public class TaxEngine
         decimal ZeroRatedSales = lines.Sum(l => l.ZeroRatedSales);
         decimal VatAmount = lines.Sum(l => l.VatAmount);
         decimal ScPwdDiscount = lines.Sum(l => l.ScPwdDiscount);
-        decimal TotalDue = VatableSales + VatAmount + VatExemptSales + ZeroRatedSales - ScPwdDiscount;
+        decimal NonVatSales = lines.Sum(l => l.NonVatSales);
+        decimal TotalDue = lines.Sum(l => l.NetSales);
 
         if(TotalDue != (decimal)Invoice.Totals.TotalDue)
         {
@@ -54,6 +55,7 @@ public class TaxEngine
             ZeroRatedSales = ZeroRatedSales,
             VatAmount = VatAmount,
             ScPwdDiscount = ScPwdDiscount,
+            NonVatSales = NonVatSales,
             TotalDue = TotalDue
         };
         return TaxComputationResult.Succeeded(lines, totals);
@@ -63,8 +65,7 @@ public class TaxEngine
         PosLineItems line, Customer customer, bool sellerIsVat, out string Error)
     {
         decimal gross = (decimal)Math.Round(line.Quantity * line.UnitPrice, 2, MidpointRounding.AwayFromZero);
-        decimal lineAmount = (decimal)Math.Round(line.Quantity * line.UnitPrice, 2, MidpointRounding.AwayFromZero);
-        if (gross != lineAmount)
+        if (gross != (decimal)line.LineAmount)
         {
             Error = "Gross Calculation did not match";
             return false;
@@ -75,20 +76,20 @@ public class TaxEngine
             return false;
         }
 
-        if ((customer.Type != "SENIOR_CITIZEN" || customer.Type != "PWD")
+        if ((customer.Type != "SENIOR_CITIZEN" && customer.Type != "PWD")
             && line.TaxType == taxType.VAT_EXEMPT_SCPWD)
         {
             Error = $"Customer must be a senior citizen or pwd to have a tax type of vat exempted for SCPWD";
             return false;
         }
 
-        if (customer.Type != "REGISTERED_BUSINESSS" && line.TaxType == taxType.VAT_EXEMPT)
+        if (customer.Type != "REGISTERED_BUSINESS" && line.TaxType == taxType.VAT_EXEMPT)
         {
             Error = $"Customer must be a registered business to have a tax type of VAT_EXEMPT";
             return false;
         }
 
-        if (sellerIsVat && line.TaxType == taxType.ZERO_RATED)
+        if (!sellerIsVat && line.TaxType == taxType.ZERO_RATED)
         {
             Error = $"Seller must be vat registered for Line No: {line.LineNo} to be zero rated";
         }

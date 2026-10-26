@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj": {}
+    "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj": {}
   },
   "projects": {
-    "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
+    "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
+        "projectUniqueName": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
         "projectName": "Middleware.Core",
-        "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
+        "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
         "packagesPath": "C:\\Users\\91460\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\obj\\",
+        "outputPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\91460\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -345,14 +345,14 @@
         }
       }
     },
-    "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj": {
+    "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
+        "projectUniqueName": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
         "projectName": "POS.Simulator",
-        "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
+        "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
         "packagesPath": "C:\\Users\\91460\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\POS.Simulator\\obj\\",
+        "outputPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\91460\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -368,8 +368,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
-                "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
+              "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
+                "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
               }
             }
           }

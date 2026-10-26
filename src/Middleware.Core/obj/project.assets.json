@@ -175,11 +175,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
+      "projectUniqueName": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
       "projectName": "Middleware.Core",
-      "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
+      "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
       "packagesPath": "C:\\Users\\91460\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\obj\\",
+      "outputPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\91460\\AppData\\Roaming\\NuGet\\NuGet.Config"

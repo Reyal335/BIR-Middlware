@@ -47,7 +47,7 @@ public class InvoiceController(
         
         string eisId = await idGenerator.generateEisID();
 
-        var invoice = Invoice.FromPos(invoice_r, taxComputationResult.Totals!, eisId);
+        var invoice = Invoice.FromPos(invoice_r, taxComputationResult, eisId);
         
 
         // Queue invoice for EISTransmission worker to build payload

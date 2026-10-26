@@ -27,6 +27,9 @@ public static class DependencyInjection
         services.AddScoped<IInvoiceRepository, EFInvoiceRepository>();
         services.AddScoped<IEisClient, HttpEisClient>();
         services.AddScoped<IEisControlSequence, EisControlSequence>();
+        services.AddScoped<TransmissionRun>();
+        services.AddScoped<IUnitOfWork, EfUnitOfWork>();
+
         services.AddSingleton<TaxEngine>();
         services.AddSingleton<EisMapper>();
 

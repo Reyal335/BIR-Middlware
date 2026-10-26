@@ -9,4 +9,4 @@ public enum TaxType {
 }
 public enum InvoiceStatus { Received, Queued, Submitting, Accepted, Rejected }    
 
-
+public enum TransmissionStatus { Created, Sent, Acknowledged, Failed, Uncertain }

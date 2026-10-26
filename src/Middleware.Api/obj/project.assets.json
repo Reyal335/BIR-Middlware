@@ -37,6 +37,22 @@
           "build/Microsoft.AspNetCore.OpenApi.targets": {}
         }
       },
+      "Microsoft.Bcl.Cryptography/10.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net10.0/Microsoft.Bcl.Cryptography.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.Bcl.Cryptography.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/_._": {}
+        }
+      },
       "Microsoft.Build.Framework/18.0.2": {
         "type": "package",
         "compile": {
@@ -508,20 +524,66 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Http/10.0.12": {
+      "Microsoft.IdentityModel.Abstractions/8.23.0": {
         "type": "package",
         "compile": {
-          "lib/net10.0/_._": {
+          "lib/net10.0/Microsoft.IdentityModel.Abstractions.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net10.0/_._": {
+          "lib/net10.0/Microsoft.IdentityModel.Abstractions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.JsonWebTokens/8.23.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.IdentityModel.Tokens": "8.23.0"
+        },
+        "compile": {
+          "lib/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
             "related": ".xml"
           }
         },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
+        "runtime": {
+          "lib/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Logging/8.23.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.IdentityModel.Abstractions": "8.23.0"
+        },
+        "compile": {
+          "lib/net10.0/Microsoft.IdentityModel.Logging.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.IdentityModel.Logging.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Tokens/8.23.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Bcl.Cryptography": "10.0.2",
+          "Microsoft.IdentityModel.Logging": "8.23.0"
+        },
+        "compile": {
+          "lib/net10.0/Microsoft.IdentityModel.Tokens.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net10.0/Microsoft.IdentityModel.Tokens.dll": {
+            "related": ".xml"
+          }
         }
       },
       "Microsoft.OpenApi/2.12.0": {
@@ -855,6 +917,7 @@
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "Microsoft.EntityFrameworkCore.Sqlite": "10.0.12",
+          "Microsoft.IdentityModel.JsonWebTokens": "8.23.0",
           "Middleware.Core": "1.0.0"
         },
         "compile": {
@@ -901,6 +964,37 @@
         "lib/net10.0/Microsoft.AspNetCore.OpenApi.xml",
         "microsoft.aspnetcore.openapi.10.0.12.nupkg.sha512",
         "microsoft.aspnetcore.openapi.nuspec"
+      ]
+    },
+    "Microsoft.Bcl.Cryptography/10.0.2": {
+      "sha512": "LG9Yll3B5aNpxv0+D47g6LiOiKBIlodhcHdQwcYzo8VeexFLGqx5ymetmA2aBRyo9cCcWsQWrFsdbsr8LvmWDw==",
+      "type": "package",
+      "path": "microsoft.bcl.cryptography/10.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/Microsoft.Bcl.Cryptography.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp2.0/Microsoft.Bcl.Cryptography.targets",
+        "lib/net10.0/Microsoft.Bcl.Cryptography.dll",
+        "lib/net10.0/Microsoft.Bcl.Cryptography.xml",
+        "lib/net462/Microsoft.Bcl.Cryptography.dll",
+        "lib/net462/Microsoft.Bcl.Cryptography.xml",
+        "lib/net8.0/Microsoft.Bcl.Cryptography.dll",
+        "lib/net8.0/Microsoft.Bcl.Cryptography.xml",
+        "lib/net9.0/Microsoft.Bcl.Cryptography.dll",
+        "lib/net9.0/Microsoft.Bcl.Cryptography.xml",
+        "lib/netstandard2.0/Microsoft.Bcl.Cryptography.dll",
+        "lib/netstandard2.0/Microsoft.Bcl.Cryptography.xml",
+        "lib/netstandard2.1/Microsoft.Bcl.Cryptography.dll",
+        "lib/netstandard2.1/Microsoft.Bcl.Cryptography.xml",
+        "microsoft.bcl.cryptography.10.0.2.nupkg.sha512",
+        "microsoft.bcl.cryptography.nuspec",
+        "useSharedDesignerContext.txt"
       ]
     },
     "Microsoft.Build.Framework/18.0.2": {
@@ -2135,33 +2229,108 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Http/10.0.12": {
-      "sha512": "x/fnoUGgmIUjSgLR1p6Mpi/vXc1Xe0xDPJnggPp23I6vwM/kY4nxyOjo8i6G5KPVw+esJM+rJsqnHbdjasvCBw==",
+    "Microsoft.IdentityModel.Abstractions/8.23.0": {
+      "sha512": "JjiBkKj12OKvuWr+kB5sQwb7fmWW5bi03Mq/rd2Fu/7YwZ1RWQO9KhI9lBxki4o1VvY0wzqny8c7nwx1uuZzVg==",
       "type": "package",
-      "path": "microsoft.extensions.http/10.0.12",
+      "path": "microsoft.identitymodel.abstractions/8.23.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "Icon.png",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/Microsoft.Extensions.Http.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net8.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Http.targets",
-        "lib/net10.0/Microsoft.Extensions.Http.dll",
-        "lib/net10.0/Microsoft.Extensions.Http.xml",
-        "lib/net462/Microsoft.Extensions.Http.dll",
-        "lib/net462/Microsoft.Extensions.Http.xml",
-        "lib/net8.0/Microsoft.Extensions.Http.dll",
-        "lib/net8.0/Microsoft.Extensions.Http.xml",
-        "lib/net9.0/Microsoft.Extensions.Http.dll",
-        "lib/net9.0/Microsoft.Extensions.Http.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.xml",
-        "microsoft.extensions.http.10.0.12.nupkg.sha512",
-        "microsoft.extensions.http.nuspec",
-        "useSharedDesignerContext.txt"
+        "README.md",
+        "lib/net10.0/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/net10.0/Microsoft.IdentityModel.Abstractions.xml",
+        "lib/net462/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/net462/Microsoft.IdentityModel.Abstractions.xml",
+        "lib/net472/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/net472/Microsoft.IdentityModel.Abstractions.xml",
+        "lib/net6.0/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/net6.0/Microsoft.IdentityModel.Abstractions.xml",
+        "lib/net8.0/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/net8.0/Microsoft.IdentityModel.Abstractions.xml",
+        "lib/net9.0/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/net9.0/Microsoft.IdentityModel.Abstractions.xml",
+        "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.dll",
+        "lib/netstandard2.0/Microsoft.IdentityModel.Abstractions.xml",
+        "microsoft.identitymodel.abstractions.8.23.0.nupkg.sha512",
+        "microsoft.identitymodel.abstractions.nuspec"
+      ]
+    },
+    "Microsoft.IdentityModel.JsonWebTokens/8.23.0": {
+      "sha512": "ePEm+mv5iswzckE3mygh52uFUeQpVlHa1B10nS4jpEyNV5tL1mLgRS9U5sMaRlhsPRsZ1DJP0+FhxSrOIfMGIg==",
+      "type": "package",
+      "path": "microsoft.identitymodel.jsonwebtokens/8.23.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net10.0/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/net10.0/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "lib/net462/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/net462/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "lib/net472/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/net472/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/net6.0/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "lib/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/net8.0/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "lib/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/net9.0/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "lib/netstandard2.0/Microsoft.IdentityModel.JsonWebTokens.dll",
+        "lib/netstandard2.0/Microsoft.IdentityModel.JsonWebTokens.xml",
+        "microsoft.identitymodel.jsonwebtokens.8.23.0.nupkg.sha512",
+        "microsoft.identitymodel.jsonwebtokens.nuspec"
+      ]
+    },
+    "Microsoft.IdentityModel.Logging/8.23.0": {
+      "sha512": "wSXXOoV4b4hhRcC492jyNBZkO0LWrcWtWP5Cl5ujrON3vTMlufXDT39gTZfBhFAZCV2XJtNU6DLHMDR6E9YpUg==",
+      "type": "package",
+      "path": "microsoft.identitymodel.logging/8.23.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net10.0/Microsoft.IdentityModel.Logging.dll",
+        "lib/net10.0/Microsoft.IdentityModel.Logging.xml",
+        "lib/net462/Microsoft.IdentityModel.Logging.dll",
+        "lib/net462/Microsoft.IdentityModel.Logging.xml",
+        "lib/net472/Microsoft.IdentityModel.Logging.dll",
+        "lib/net472/Microsoft.IdentityModel.Logging.xml",
+        "lib/net6.0/Microsoft.IdentityModel.Logging.dll",
+        "lib/net6.0/Microsoft.IdentityModel.Logging.xml",
+        "lib/net8.0/Microsoft.IdentityModel.Logging.dll",
+        "lib/net8.0/Microsoft.IdentityModel.Logging.xml",
+        "lib/net9.0/Microsoft.IdentityModel.Logging.dll",
+        "lib/net9.0/Microsoft.IdentityModel.Logging.xml",
+        "lib/netstandard2.0/Microsoft.IdentityModel.Logging.dll",
+        "lib/netstandard2.0/Microsoft.IdentityModel.Logging.xml",
+        "microsoft.identitymodel.logging.8.23.0.nupkg.sha512",
+        "microsoft.identitymodel.logging.nuspec"
+      ]
+    },
+    "Microsoft.IdentityModel.Tokens/8.23.0": {
+      "sha512": "PUowLq8gqICt+oepHWmKBOJmnVmWoQ5dOVn2CgwFMBZZOAEMHgCQLWs8ONYdsjAyjhDHaFy+AAx0OMG/oV06Zw==",
+      "type": "package",
+      "path": "microsoft.identitymodel.tokens/8.23.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "lib/net10.0/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net10.0/Microsoft.IdentityModel.Tokens.xml",
+        "lib/net462/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net462/Microsoft.IdentityModel.Tokens.xml",
+        "lib/net472/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net472/Microsoft.IdentityModel.Tokens.xml",
+        "lib/net6.0/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net6.0/Microsoft.IdentityModel.Tokens.xml",
+        "lib/net8.0/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net8.0/Microsoft.IdentityModel.Tokens.xml",
+        "lib/net9.0/Microsoft.IdentityModel.Tokens.dll",
+        "lib/net9.0/Microsoft.IdentityModel.Tokens.xml",
+        "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.dll",
+        "lib/netstandard2.0/Microsoft.IdentityModel.Tokens.xml",
+        "microsoft.identitymodel.tokens.8.23.0.nupkg.sha512",
+        "microsoft.identitymodel.tokens.nuspec"
       ]
     },
     "Microsoft.OpenApi/2.12.0": {
@@ -2535,7 +2704,6 @@
     "net10.0": [
       "Microsoft.AspNetCore.OpenApi >= 10.0.12",
       "Microsoft.EntityFrameworkCore.Design >= 10.0.13",
-      "Microsoft.Extensions.Http >= 10.0.12",
       "Middleware.Core >= 1.0.0",
       "Middleware.Infra >= 1.0.0"
     ]
@@ -2546,11 +2714,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Api\\Middleware.Api.csproj",
+      "projectUniqueName": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Api\\Middleware.Api.csproj",
       "projectName": "Middleware.Api",
-      "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Api\\Middleware.Api.csproj",
+      "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Api\\Middleware.Api.csproj",
       "packagesPath": "C:\\Users\\91460\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Api\\obj\\",
+      "outputPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Api\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\91460\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -2566,11 +2734,11 @@
           "framework": "net10.0",
           "targetAlias": "net10.0",
           "projectReferences": {
-            "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
-              "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
+            "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
+              "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
             },
-            "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj": {
-              "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj"
+            "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj": {
+              "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj"
             }
           }
         }
@@ -2601,10 +2769,6 @@
             "suppressParent": "All",
             "target": "Package",
             "version": "[10.0.13, )"
-          },
-          "Microsoft.Extensions.Http": {
-            "target": "Package",
-            "version": "[10.0.12, )"
           }
         },
         "imports": [
@@ -3043,17 +3207,5 @@
         }
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1510",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "PackageReference Microsoft.Extensions.Http will not be pruned. This package is automatically available and does not need to be referenced explicitly. Remove the PackageReference item.",
-      "libraryId": "Microsoft.Extensions.Http",
-      "targetGraphs": [
-        "net10.0"
-      ]
-    }
-  ]
+  }
 }

@@ -12,12 +12,17 @@ public sealed class LineAmounts
     public decimal ZeroRatedSales { get; private init; }
     public decimal VatAmount { get; private init; }
     public decimal ScPwdDiscount { get; private init; }
+    public decimal NonVatSales { get; private init; }
+
+    // Amount actually due for this line; summing it across lines gives the invoice TotalDue
+    public decimal NetSales =>
+        VatableSales + VatAmount + VatExemptSales + ZeroRatedSales + NonVatSales - ScPwdDiscount;
 
     private LineAmounts() {}
 
     public static LineAmounts Vatable(int lineNo, decimal gross, decimal vatRate)
     {
-        var net = Math.Round(gross / 1 + vatRate, 2, MidpointRounding.AwayFromZero);
+        var net = Math.Round(gross / vatRate, 2, MidpointRounding.AwayFromZero);
 
         return new LineAmounts
         {
@@ -44,14 +49,14 @@ public sealed class LineAmounts
         return new LineAmounts
         {
             LineNo = lineNo,
-            ZeroRatedSales = gross,
+            VatExemptSales = gross,
             Gross = gross
         };  
     }
 
     public static LineAmounts VatExemptScPwd(int LineNo, decimal gross, decimal vatRate, decimal scDiscount)
     {
-        var net = Math.Round(gross / 1 + vatRate, 2, MidpointRounding.AwayFromZero);
+        var net = Math.Round(gross / vatRate, 2, MidpointRounding.AwayFromZero);
         var scPwdDiscount = Math.Round(net * scDiscount, 2, MidpointRounding.AwayFromZero);
         return new LineAmounts
         {
@@ -65,6 +70,7 @@ public sealed class LineAmounts
     public static LineAmounts NonVat(int lineNo, decimal gross) => new()
     {
         LineNo = lineNo,
+        NonVatSales = gross,
         Gross = gross
     };
 
