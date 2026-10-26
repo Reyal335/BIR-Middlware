@@ -136,8 +136,14 @@ namespace Middleware.Infra.Migrations
                             b1.Property<int>("LineNo")
                                 .HasColumnType("INTEGER");
 
+                            b1.Property<decimal>("NonVatSales")
+                                .HasColumnType("TEXT");
+
                             b1.Property<int>("Quantity")
                                 .HasColumnType("INTEGER");
+
+                            b1.Property<decimal>("ScPwdDiscount")
+                                .HasColumnType("TEXT");
 
                             b1.Property<string>("Sku")
                                 .HasColumnType("TEXT");
@@ -147,6 +153,18 @@ namespace Middleware.Infra.Migrations
                                 .HasColumnType("TEXT");
 
                             b1.Property<decimal>("UnitPrice")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("VatAmount")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("VatExemptSales")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("VatableSales")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("ZeroRatedSales")
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("Id");
@@ -165,6 +183,9 @@ namespace Middleware.Infra.Migrations
                                 .HasColumnType("INTEGER");
 
                             b1.Property<decimal>("GrossAmount")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<decimal>("NonVatSales")
                                 .HasColumnType("TEXT");
 
                             b1.Property<decimal>("OtherDiscount")

@@ -28,6 +28,10 @@ public static class DependencyInjection
         services.AddScoped<IEisClient, HttpEisClient>();
         services.AddScoped<IEisControlSequence, EisControlSequence>();
         services.AddSingleton<TaxEngine>();
+        services.AddSingleton<EisMapper>();
+
+        // Singleton: the key is loaded once and the RSA instance is disposed with the container
+        services.AddSingleton<IEisSigner, EisSigner>();
 
         services.AddOptions<EisOptions>().Bind(configuration.GetSection("Eis")).ValidateOnStart();
         services.AddOptions<TransmissionWorkerOptions>().Bind(configuration.GetSection("TransmissionWorker")).ValidateOnStart();
@@ -38,6 +42,13 @@ public static class DependencyInjection
             sp.GetRequiredService<IOptions<EisOptions>>().Value.CertificationNumber!,
             sp.GetRequiredService<IEisControlSequence>()
         ));
+
+        services.AddHttpClient<IEisClient, HttpEisClient>((sp, client) =>
+        {
+            var eis = sp.GetRequiredService<IOptions<EisOptions>>();
+            client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl ?? "http://localhost:8000");
+            client.Timeout = eis.Value.HttpTimeout;
+        });
 
         return services;
     }

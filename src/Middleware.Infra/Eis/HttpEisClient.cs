@@ -1,15 +1,22 @@
 using Middleware.Core.interfaces;
 using Middleware.Core.Models;
-
+using Middleware.Core.Eis;
+using System.Text.Json;
 
 namespace Middleware.Infra.Eis;
 
-public class HttpEisClient : IEisClient
+public class HttpEisClient(EisMapper eisMapper, IEisSigner eisSigner) : IEisClient
 {
     public async Task SubmitBatch(List<Invoice> invoices)
     {
         // Eis Mapper takes 100 invoices and shapes them to EIS compliant JSON format
 
+        foreach (var invoice in invoices)
+        {
+
+        }
+
+        
         // EisUniqueIdGenerator provides Id for each invoice
 
         

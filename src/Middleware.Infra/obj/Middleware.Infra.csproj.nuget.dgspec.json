@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj": {}
+    "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj": {}
   },
   "projects": {
-    "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
+    "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
+        "projectUniqueName": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
         "projectName": "Middleware.Core",
-        "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
+        "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj",
         "packagesPath": "C:\\Users\\91460\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\obj\\",
+        "outputPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\91460\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -345,14 +345,14 @@
         }
       }
     },
-    "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj": {
+    "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj",
+        "projectUniqueName": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj",
         "projectName": "Middleware.Infra",
-        "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj",
+        "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\Middleware.Infra.csproj",
         "packagesPath": "C:\\Users\\91460\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\obj\\",
+        "outputPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Infra\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\91460\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -368,8 +368,8 @@
             "framework": "net10.0",
             "targetAlias": "net10.0",
             "projectReferences": {
-              "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
-                "projectPath": "C:\\Users\\91460\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
+              "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj": {
+                "projectPath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\Middleware.Core\\Middleware.Core.csproj"
               }
             }
           }
@@ -401,9 +401,17 @@
               "target": "Package",
               "version": "[10.0.12, )"
             },
+            "Microsoft.Extensions.Http": {
+              "target": "Package",
+              "version": "[10.0.14, )"
+            },
             "Microsoft.Extensions.Options.ConfigurationExtensions": {
               "target": "Package",
-              "version": "[10.0.13, )"
+              "version": "[10.0.14, )"
+            },
+            "Microsoft.IdentityModel.JsonWebTokens": {
+              "target": "Package",
+              "version": "[8.23.0, )"
             }
           },
           "imports": [
