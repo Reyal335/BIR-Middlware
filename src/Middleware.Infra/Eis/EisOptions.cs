@@ -9,15 +9,18 @@ public class EisOptions
     public string? SubmitPath { set; get; }
     public string? ResultPath { get; set; }
     public string? CertificationNumber { get; set; }
+    public string? AccreditationId { get; set; }
     public string? ApplicationId { set; get; }
     public TimeSpan HttpTimeout { get; set; }
     public TimeSpan TokenRefreshmargin { get; set; }
     public int MaxBatchSize { get; set; }
     public string? AuthSecret { get; set; }
-    public string? HmacSecret { get; set; }
+    public string? ApplicationSecretKey { get; set; }
+
     public string? SigningKey { get; set; }
     public string? SigningKeyId { get; set; }
     public string? EncryptionKey { get; set; }
+    public string? BirPublicKey { get; set; }
 }
 
 public class TransmissionWorkerOptions

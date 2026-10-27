@@ -8,7 +8,10 @@ public class EisController : Controller
 {
     [Route("authentication")]
     [HttpPost]
-    public IActionResult AuthenticateSystem()
+    public IActionResult AuthenticateSystem(
+        [FromHeader(Name = "accreditationId")] string accreditationId,
+        [FromHeader(Name = "applicationId")] string applicationId
+    )
     {
         return Ok(new {message = "nice"});
     }
