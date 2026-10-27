@@ -1,0 +1,6 @@
+@Eis.Mock_HostAddress = http://localhost:5110
+
+GET {{Eis.Mock_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

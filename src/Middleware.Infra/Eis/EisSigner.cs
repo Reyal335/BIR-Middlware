@@ -22,11 +22,11 @@ public sealed class EisSigner : IEisSigner, IDisposable
     public EisSigner(IOptions<EisOptions> options)
     {
         var opts = options.Value;
-        if (string.IsNullOrWhiteSpace(opts.SigningKeyPath))
+        if (string.IsNullOrWhiteSpace(opts.SigningKey))
             throw new InvalidOperationException("Eis:SigningKeyPath is not configured.");
 
         // Accepts PEM-encoded PKCS#8 ("BEGIN PRIVATE KEY") or PKCS#1 ("BEGIN RSA PRIVATE KEY")
-        _rsa.ImportFromPem(File.ReadAllText(opts.SigningKeyPath));
+        _rsa.ImportPkcs8PrivateKey(Convert.FromBase64String(opts.SigningKey), out _);
 
         var header = new Dictionary<string, string> { ["alg"] = "RS256" };
         if (!string.IsNullOrWhiteSpace(opts.SigningKeyId))

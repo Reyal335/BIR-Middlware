@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("POS.Simulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+7843e54a3bb1fa242285ad06b0ec4971d5975676")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+010b3598029c3c507320440ac86247882071120f")]
 [assembly: System.Reflection.AssemblyProductAttribute("POS.Simulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("POS.Simulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

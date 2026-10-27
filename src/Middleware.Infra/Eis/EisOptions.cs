@@ -15,7 +15,7 @@ public class EisOptions
     public int MaxBatchSize { get; set; }
     public string? AuthSecret { get; set; }
     public string? HmacSecret { get; set; }
-    public string? SigningKeyPath { get; set; }
+    public string? SigningKey { get; set; }
     public string? SigningKeyId { get; set; }
     public string? EncryptionKey { get; set; }
 }

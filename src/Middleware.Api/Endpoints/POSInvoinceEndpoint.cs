@@ -11,10 +11,6 @@ using System.Text.Json.Nodes;
 
 namespace Middleware.Api.Endpoints;
 
-public class RandomWordDto
-{
-    public string RandomWord { get; set; } = string.Empty;
-}
 
 [ApiController]
 [Route("[controller]")]
