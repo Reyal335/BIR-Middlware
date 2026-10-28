@@ -8,19 +8,28 @@ public class EisOptions
     public string? AuthPath { set; get; }
     public string? SubmitPath { set; get; }
     public string? ResultPath { get; set; }
-    public string? CertificationNumber { get; set; }
-    public string? AccreditationId { get; set; }
-    public string? ApplicationId { set; get; }
     public TimeSpan HttpTimeout { get; set; }
     public TimeSpan TokenRefreshmargin { get; set; }
     public int MaxBatchSize { get; set; }
     public string? AuthSecret { get; set; }
-    public string? ApplicationSecretKey { get; set; }
 
+    // Identity sent in headers
+    public string? AccreditationId { get; set; }
+    public string? ApplicationId { set; get; }
+
+    // login
+    public string? UserId { get; set; }
+    public string? Password { get; set; }
+    public string? ApplicationSecretKey { get; set; }
+    public string? BirPublicKey { get; set; }
+    public TimeSpan TokenRefreshMargin { get; set; }
+
+    // Jws Signing
     public string? SigningKey { get; set; }
     public string? SigningKeyId { get; set; }
+
     public string? EncryptionKey { get; set; }
-    public string? BirPublicKey { get; set; }
+
 }
 
 public class TransmissionWorkerOptions
