@@ -11,11 +11,6 @@ public class HttpEisClient(EisMapper eisMapper, IEisSigner eisSigner) : IEisClie
     {
         // Eis Mapper takes 100 invoices and shapes them to EIS compliant JSON format
 
-        foreach (var invoice in invoices)
-        {
-
-        }
-
         
         // EisUniqueIdGenerator provides Id for each invoice
 

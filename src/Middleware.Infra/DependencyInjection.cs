@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Middleware.Infra.Data;
 using Middleware.Infra.Eis;
+using Middleware.Infra.Cache;
+using Middleware.Infra.HMAC;
 
 using Middleware.Core.interfaces;
 using Middleware.Core.Repositories;
@@ -42,16 +44,22 @@ public static class DependencyInjection
         services.AddOptions<ComplianceOptions>().Bind(configuration.GetSection("Compliance")).ValidateOnStart();
 
         services.AddScoped(sp => new EisUniqueIdGenerator(
-            sp.GetRequiredService<IOptions<EisOptions>>().Value.CertificationNumber!,
+            sp.GetRequiredService<IOptions<EisOptions>>().Value.AccreditationId!,
             sp.GetRequiredService<IEisControlSequence>()
         ));
 
-        services.AddHttpClient<IEisClient, HttpEisClient>((sp, client) =>
+        services.AddHttpClient<IEisClient, HttpEisClient>("Eis", (sp, client) =>
         {
             var eis = sp.GetRequiredService<IOptions<EisOptions>>();
             client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl ?? "http://localhost:8000");
             client.Timeout = eis.Value.HttpTimeout;
         });
+
+        services.AddHttpClient("EisAuth", (sp, client) => {
+            client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl);
+        }).AddHttpMessageHandler<HmacSigningHandler>();
+
+        services.AddSingleton<EisTokenCache>();
 
         return services;
     }
