@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Eis.Mock.Registry;
 
 namespace Eis.Mock.Endpoints;
 
@@ -13,6 +14,12 @@ public class EisController : Controller
         [FromHeader(Name = "applicationId")] string applicationId
     )
     {
+    if (!AppRegistry.Apps.TryGetValue(applicationId, out var app)
+        || app.AccreditationId != accreditationId
+        || !app.IsActive)
+    {
+        // return auth error
+    }
         return Ok(new {message = "nice"});
     }
 
