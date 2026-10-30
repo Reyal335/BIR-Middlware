@@ -6,4 +6,5 @@ public static class AuthErrorCodes
     public const string AccreditationMismatch = "AUTH002";
     public const string ApplicationInactive  = "AUTH003";
     public const string InvalidSignature     = "AUTH004";
+    public const string InvalidDateTime = "AUTH005";
 }
