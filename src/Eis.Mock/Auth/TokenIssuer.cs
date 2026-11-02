@@ -1,10 +1,11 @@
 using Eis.Mock.Interfaces;
 using System;
 using System.Security.Cryptography;
+using Eis.Mock.Store;
 
 namespace Eis.Mock.Auth;
 
-public class TokenIssuer : ITokenIssuer
+public class TokenIssuer (SessionStore sessionStore) : ITokenIssuer
 {
     public TokenBody IssueTokens()
     {
@@ -22,6 +23,9 @@ public class TokenIssuer : ITokenIssuer
         // Date formatted to yyyyMMddHHmmss as per BIR regulations
         string tokenExpiry = $"{expirationTime:yyyy-MM-ddTHH:mm:ss}";
         
+        // Save auth token and session key to the session store
+        sessionStore.AddSession(authToken, sessionKey);
+
         return new TokenBody(authToken, sessionKey, tokenExpiry);
     }
 }
