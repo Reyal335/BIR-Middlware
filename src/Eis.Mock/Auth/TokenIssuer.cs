@@ -21,7 +21,7 @@ public class TokenIssuer : ITokenIssuer
 
         // Date formatted to yyyyMMddHHmmss as per BIR regulations
         string tokenExpiry = $"{expirationTime:yyyy-MM-ddTHH:mm:ss}";
-
+        
         return new TokenBody(authToken, sessionKey, tokenExpiry);
     }
 }
