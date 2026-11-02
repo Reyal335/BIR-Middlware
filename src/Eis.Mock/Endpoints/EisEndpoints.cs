@@ -20,6 +20,8 @@ public class EisController : Controller
 
     // If there is no App registered on linked appliationId return an error
     {
+        DateTime referenceTime = DateTime.UtcNow;
+
         if (!AppRegistry.Apps.TryGetValue(applicationId, out var app)
             || app.AccreditationId != accreditationId
             || !app.IsActive)
@@ -35,7 +37,16 @@ public class EisController : Controller
             return Unauthorized(new
             {
                 error_code = AuthErrorCodes.InvalidDateTime,
-                message = "Invalid datetime or more than 10 minutes had elapsed from the mock's clok"
+                message = "Invalid datetime"
+            });
+        }
+
+        if (Math.Abs((result - referenceTime).TotalMinutes) < 10)
+        {
+            return Unauthorized(new
+            {
+                error_code = AuthErrorCodes.ExceedElapsedTime,
+                message = "Exceeded the elapsed time of 10 minutes"
             });
         }
         

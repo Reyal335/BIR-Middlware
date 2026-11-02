@@ -7,4 +7,5 @@ public static class AuthErrorCodes
     public const string ApplicationInactive  = "AUTH003";
     public const string InvalidSignature     = "AUTH004";
     public const string InvalidDateTime = "AUTH005";
+    public const string ExceedElapsedTime = "AUTH006";
 }
