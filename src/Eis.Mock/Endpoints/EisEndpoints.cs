@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Eis.Mock.Registry;
 using Eis.Mock.Auth;
+using Eis.Mock.DTO;
 using System;
 using System.Globalization;
 
@@ -50,7 +51,7 @@ public class EisController : Controller
             });
         }
         
-        
+
         return Ok(new {message = "nice"});
     }
 
