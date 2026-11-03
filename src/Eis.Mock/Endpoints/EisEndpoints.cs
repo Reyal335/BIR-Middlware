@@ -1,9 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using Eis.Mock.Registry;
-using Eis.Mock.Auth;
 using Eis.Mock.DTO;
-using System;
-using System.Globalization;
+using Eis.Mock.Interfaces;
 
 namespace Eis.Mock.Endpoints;
 
@@ -11,46 +8,28 @@ namespace Eis.Mock.Endpoints;
 [Route("api/v2")]
 public class EisController : Controller
 {
+    private readonly IAuthService _authService;
+
+    public EisController(IAuthService authService)
+    {
+        _authService = authService;
+    }
+
     [Route("authentication")]
     [HttpPost]
     public IActionResult AuthenticateSystem(
         [FromHeader(Name = "accreditationId")] string accreditationId,
         [FromHeader(Name = "applicationId")] string applicationId,
-        [FromHeader(Name = "datetime")] string datetime
+        [FromHeader(Name = "datetime")] string datetime,
+        [FromBody] AuthBody body
     )
-
-    // If there is no App registered on linked appliationId return an error
     {
-        DateTime referenceTime = DateTime.UtcNow;
-
-        if (!AppRegistry.Apps.TryGetValue(applicationId, out var app)
-            || app.AccreditationId != accreditationId
-            || !app.IsActive)
-        {
-            // return auth error
-            var error = AuthValidator.Validate(applicationId, accreditationId);
-            return Unauthorized(new {error_code = error!.Code, message = error!.Message});
-        }
-
-        if (!DateTime.TryParseExact(datetime, "yyyyMMddHHmmss", CultureInfo.InvariantCulture,
-            DateTimeStyles.None, out DateTime result))
-        {
-            return Unauthorized(new
-            {
-                error_code = AuthErrorCodes.InvalidDateTime,
-                message = "Invalid datetime"
-            });
-        }
-
-        if (Math.Abs((result - referenceTime).TotalMinutes) < 10)
-        {
-            return Unauthorized(new
-            {
-                error_code = AuthErrorCodes.ExceedElapsedTime,
-                message = "Exceeded the elapsed time of 10 minutes"
-            });
-        }
+        var result = _authService.Authenticate(applicationId, accreditationId, datetime, body);
         
+        if (result.Error is not null)
+        {
+            return Unauthorized(new {error_code = result.Error.Code, message = result.Error.Message});
+        }
 
         return Ok(new {message = "nice"});
     }

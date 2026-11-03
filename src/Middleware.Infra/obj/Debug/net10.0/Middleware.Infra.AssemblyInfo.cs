@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Middleware.Infra")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+254b069de448529c0447a5f2c49157cd40c02875")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+14b70dd7ee475994bccfe9365136813a4f1b420d")]
 [assembly: System.Reflection.AssemblyProductAttribute("Middleware.Infra")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Middleware.Infra")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

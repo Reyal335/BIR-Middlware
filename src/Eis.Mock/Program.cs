@@ -10,9 +10,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 
 builder.Services.AddTransient<ITokenIssuer, TokenIssuer>();
+builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddSingleton<SessionStore>();
 
+builder.Services.AddControllers();
 
 var app = builder.Build();
+
+app.MapControllers();
 
 app.Run();

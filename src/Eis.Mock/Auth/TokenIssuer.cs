@@ -24,7 +24,7 @@ public class TokenIssuer (SessionStore sessionStore) : ITokenIssuer
         string tokenExpiry = $"{expirationTime:yyyy-MM-ddTHH:mm:ss}";
         
         // Save auth token and session key to the session store
-        sessionStore.AddSession(authToken, sessionKey);
+        sessionStore.AddSession(authToken, new SessionDetails (sessionKey, tokenExpiry));
 
         return new TokenBody(authToken, sessionKey, tokenExpiry);
     }
