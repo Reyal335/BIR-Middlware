@@ -20,5 +20,15 @@ public static class AuthValidator
         return null; // passed
     }
 
-    
+    public static ErrorResponse? ValidateCredentials(string userId, string password, string applicationId)
+    {
+        // Same error for an unknown user and a wrong password so valid user IDs can't be probed
+        if (!UserRegistry.Users.TryGetValue(userId, out var user) || user.password != password)
+            return new(AuthErrorCodes.InvalidCredentials, "Invalid user ID or password.");
+
+        if (!user.ApplicationIds.Contains(applicationId))
+            return new(AuthErrorCodes.UserNotLinkedToApplication, "User is not linked to this application.");
+
+        return null; // passed
+    }
 }

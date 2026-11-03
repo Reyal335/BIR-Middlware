@@ -38,7 +38,9 @@ public class EisTokenCache(
                     if (string.IsNullOrEmpty(opts.BirPublicKey))
                         throw new InvalidOperationException("BIR public key missing");
 
-                    var authKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
+                    string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+                    var authKey = RandomNumberGenerator.GetString(chars, 32);
                     
                     var json = JsonSerializer.Serialize(new
                     {

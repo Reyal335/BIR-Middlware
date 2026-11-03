@@ -36,7 +36,12 @@ public class AuthService (ITokenIssuer tokenIssuer, IConfiguration configuration
             ?? throw new InvalidOperationException("Mock:EisPrivateKey is not configured");
 
         AuthCredentials authCredentials = RSAHelper.DecryptBase64Rsa<AuthCredentials>(authBody.data, privateKey);
-        
+
+        // Check the credentials before a session is created for the tokens
+        var credentialsError = AuthValidator.ValidateCredentials(authCredentials.userId, authCredentials.password, applicationId);
+        if (credentialsError is not null)
+            return new AuthResult(null, credentialsError);
+
         var tokens = tokenIssuer.IssueTokens();
 
         var EisReply = new EisReply
@@ -50,7 +55,7 @@ public class AuthService (ITokenIssuer tokenIssuer, IConfiguration configuration
 
         var EisReplyJson = JsonSerializer.Serialize(EisReply);
 
-        string data = Aes256CbcHelper.Encrypt(EisReplyJson, privateKey);
+        string data = Aes256CbcHelper.Encrypt(EisReplyJson, authCredentials.authKey);
 
         return new AuthResult(data, null);
     }
