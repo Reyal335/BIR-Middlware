@@ -5,6 +5,7 @@ using System;
 using System.Text.Json;
 using System.Globalization;
 using Microsoft.OpenApi;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Eis.Mock.Auth;
 
@@ -38,10 +39,19 @@ public class AuthService (ITokenIssuer tokenIssuer, IConfiguration configuration
         
         var tokens = tokenIssuer.IssueTokens();
 
+        var EisReply = new EisReply
+        {
+          accreditationId = accreditationId,
+          userId = authCredentials.userId,
+          authToken = tokens.AuthToken,
+          sessionKey = tokens.SessionKey,
+          tokenExpiry = tokens.TokenExpirty  
+        };
 
+        var EisReplyJson = JsonSerializer.Serialize(EisReply);
 
-        // string encryptedData = 
+        string data = Aes256CbcHelper.Encrypt(EisReplyJson, privateKey);
 
-        return new AuthResult(tokens, null);
+        return new AuthResult(data, null);
     }
 }

@@ -31,7 +31,7 @@ public class EisController : Controller
             return Unauthorized(new {error_code = result.Error.Code, message = result.Error.Message});
         }
 
-        return Ok(new {message = "nice"});
+        return Ok(new { status = "200", data = result.data });
     }
 
     [Route("invoices")]

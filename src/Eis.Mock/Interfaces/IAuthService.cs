@@ -3,7 +3,7 @@ using Eis.Mock.DTO;
 
 namespace Eis.Mock.Interfaces;
 
-public sealed record AuthResult(TokenBody? Tokens, ErrorResponse? Error);
+public sealed record AuthResult(string? data, ErrorResponse? Error);
 
 public interface IAuthService
 {
