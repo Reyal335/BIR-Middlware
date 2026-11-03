@@ -25,6 +25,8 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddSqlite<AppDb>(connectionString);
 
+        services.AddTransient<HmacSigningHandler>();
+
         services.AddScoped<InvoiceIntakeService>();
         services.AddScoped<IInvoiceRepository, EFInvoiceRepository>();
         services.AddScoped<IEisClient, HttpEisClient>();

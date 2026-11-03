@@ -13,7 +13,11 @@ public class AuthService (ITokenIssuer tokenIssuer, IConfiguration configuration
 {
     public AuthResult Authenticate(string applicationId, string accreditationId, string datetime, AuthBody authBody)
     {
-        DateTime referenceTime = DateTime.UtcNow;
+        string timeZoneId = "Asia/Manila";
+        
+        TimeZoneInfo manilaZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+
+        DateTime referenceTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, manilaZone);
 
         // If there is no App registered on linked appliationId return an error
         var error = AuthValidator.Validate(applicationId, accreditationId);

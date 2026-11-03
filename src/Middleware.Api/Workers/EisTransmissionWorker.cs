@@ -3,9 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Middleware.Core.interfaces;
-using Middleware.Core.Models;
-using Middleware.Core.Eis;
+using Middleware.Core.Services;
 
 namespace Middleware.Api.Workers;
 
@@ -13,20 +11,14 @@ public class EisTransmissionWorker : BackgroundService
 {
     private readonly ILogger<EisTransmissionWorker> _logger;
     private readonly IServiceScopeFactory _serviceScopeFactory;
-    private readonly EisMapper _eisMapper;
-    private readonly IEisSigner _eisSigner;
     // You can inject dependencies like loggers or HTTP clients here
     public EisTransmissionWorker(
-        ILogger<EisTransmissionWorker> logger, 
-        IServiceScopeFactory serviceScopeFactory,
-        EisMapper eisMapper,
-        IEisSigner eisSigner
+        ILogger<EisTransmissionWorker> logger,
+        IServiceScopeFactory serviceScopeFactory
         )
     {
         _logger = logger;
         _serviceScopeFactory = serviceScopeFactory;
-        _eisMapper = eisMapper;
-        _eisSigner = eisSigner;
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -37,24 +29,13 @@ public class EisTransmissionWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-            await using AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope();
 
-            IEisClient eisClient = scope.ServiceProvider.GetRequiredService<IEisClient>();
-            IInvoiceRepository invoiceRepository = scope.ServiceProvider.GetRequiredService<IInvoiceRepository>();
-
-            // Get due invoices
-            List<Invoice> invoices = await invoiceRepository.FindQueuedInvoices();
-            foreach (var invoice in invoices) {
-
-                // Map invoice first before serializing
-                var invoiceJson = EisJson.Serialize(_eisMapper.Map(invoice));
-
-                // Generate JWS
-                invoice.AttachSignature(_eisSigner.Sign(invoiceJson));   
+            // Scoped per iteration so the DbContext is released before the delay
+            await using (AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope())
+            {
+                TransmissionRun transmissionRun = scope.ServiceProvider.GetRequiredService<TransmissionRun>();
+                await transmissionRun.ExecuteAsync(stoppingToken);
             }
-
-
-            await eisClient.SubmitBatch(invoices);
 
             // Simulate background work (e.g., polling a database,   processing a queue)
             await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken); 

@@ -1,10 +1,14 @@
 using Middleware.Infra.Eis;
+using Middleware.Infra.Helpers;
+using Middleware.Core.Eis;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Internal;
 using System.Security.Cryptography;
 using System.Text.Json;
 using System.Text;
 using System.Net.Http.Json;
+using System.Globalization;
+
 
 namespace Middleware.Infra.Cache;
 
@@ -25,7 +29,7 @@ public class EisTokenCache(
             (_session.ExpiresAt - DateTimeOffset.Now).TotalMinutes < 2)
         {
             await _lock.WaitAsync();
-            var ses = Task.Run(async () =>
+            var ses = await Task.Run(async () =>
             {
                 try
                 {   
@@ -57,9 +61,33 @@ public class EisTokenCache(
 
 
                     var response = await client.PostAsJsonAsync(opts.AuthPath, new { data }, ct);
-                    var jsonString = await response.Content.ReadAsStringAsync();
-                    EisSession ses = JsonSerializer.Deserialize<EisSession>(jsonString)!;
-                    var session = new EisSession(ses.AuthToken, ses.SessionKey, ses.ExpiresAt);
+
+                    response.EnsureSuccessStatusCode();
+
+                    EisAuthReply? replyJson = await response.Content.ReadFromJsonAsync<EisAuthReply>();
+                    // Decryption Goes Here
+                    var responseJson = Aes256CbcHelper.Decrypt(replyJson!.Data, authKey);
+                    EisAuthCredentials? sessionCreds = JsonSerializer.Deserialize<EisAuthCredentials>(responseJson); 
+
+                    string manilaTimezone = "Asia/Manila";
+                    TimeZoneInfo manilaZone = TimeZoneInfo.FindSystemTimeZoneById(manilaTimezone);
+
+                    string format = "yyyy-MM-ddTHH:mm:ss";
+
+                    bool success = DateTimeOffset.TryParseExact(
+                        sessionCreds!.TokenExpiry,
+                        format,
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out DateTimeOffset expiresAt
+                    );
+
+                    if (!success)
+                    {
+                        throw new InvalidOperationException("Error parsing datetime");
+                    }
+
+                    var session = new EisSession(sessionCreds!.AuthToken, sessionCreds!.SessionKey, expiresAt);
                     _session = session;
 
                     return _session;
