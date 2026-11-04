@@ -6,7 +6,10 @@ using Middleware.Infra.Cache;
 
 namespace Middleware.Infra.Eis;
 
-public class HttpEisClient(IHttpClientFactory httpClientFactory, EisTokenCache tokenCache) : IEisClient
+public class HttpEisClient(
+    IHttpClientFactory httpClientFactory, 
+    EisTokenCache tokenCache,
+    IEisSigner eisSigner) : IEisClient
 {
     public async Task SubmitBatch(List<Invoice> invoices)
     {
@@ -15,6 +18,13 @@ public class HttpEisClient(IHttpClientFactory httpClientFactory, EisTokenCache t
             - Each session lasts for 6 hours
         **/
         var session = await tokenCache.GetEisSessionAsync();
+
+        var plainText = JsonSerializer.Serialize(new
+        {
+            invoices = invoices.Select(i => i.SignedJws).ToArray()
+        });
+
+        var data = eisSigner.Encrypt(plainText);
 
 
     }
