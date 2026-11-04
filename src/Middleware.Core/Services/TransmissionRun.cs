@@ -18,13 +18,23 @@ public class TransmissionRun(
         // Get due invoices
         List<Invoice> invoices = await invoiceRepository.FindQueuedInvoices();
 
-        foreach (var invoice in invoices)
+        try
         {
-            // Map invoice first before serializing
-            var invoiceJson = EisJson.Serialize(eisMapper.Map(invoice));
+            foreach (var invoice in invoices)
+            {
+                // Map invoice first before serializing
+                var invoiceJson = EisJson.Serialize(eisMapper.Map(invoice));
 
-            // Generate JWS
-            invoice.AttachSignature(eisSigner.Sign(invoiceJson));
+                // Generate JWS
+                invoice.AttachSignature(eisSigner.Sign(invoiceJson));
+
+                // Mark invoice as queued
+                invoice.MarkSubmitted();
+            }            
+        }
+        catch
+        {
+            throw new InvalidOperationException("Something went wront ");
         }
 
         // Save the signatures before sending
