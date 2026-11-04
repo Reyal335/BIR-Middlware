@@ -28,8 +28,15 @@ public class TransmissionRun(
                 // Generate JWS
                 invoice.AttachSignature(eisSigner.Sign(invoiceJson));
 
+                // Submit Invoices
+                await eisClient.SubmitBatch(invoices);
+
                 // Mark invoice as queued
                 invoice.MarkSubmitted();
+
+                // Save the signatures before sending
+                await unitOfWork.SaveChangesAsync(ct);
+
             }            
         }
         catch
@@ -37,9 +44,7 @@ public class TransmissionRun(
             throw new InvalidOperationException("Something went wront ");
         }
 
-        // Save the signatures before sending
-        await unitOfWork.SaveChangesAsync(ct);
 
-        await eisClient.SubmitBatch(invoices);
+
     }
 }
