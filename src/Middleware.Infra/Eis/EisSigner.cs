@@ -19,6 +19,9 @@ public sealed class EisSigner : IEisSigner, IDisposable
     private readonly RSA _rsa = RSA.Create();
     private readonly string _header;
 
+    private const int NonceSize = 12;
+    private const int TagSize = 16;
+
     public EisSigner(IOptions<EisOptions> options)
     {
         var opts = options.Value;
@@ -46,9 +49,22 @@ public sealed class EisSigner : IEisSigner, IDisposable
         return $"{_header}.{payload}.{Base64UrlEncoder.Encode(signature)}";
     }
 
-    public string Encrypt(string JWS)
+    public string Encrypt(string data, string sessionKeyString)
     {
-        return "sdfdsf";
+
+        byte[] sessionKey = Convert.FromBase64String(sessionKeyString);
+
+        byte[] input = Convert.FromBase64String(data);
+
+        byte[] nonce = input[..12];
+        byte[] tag = input[^16..];
+        byte[] cipherBytes = input[12..^16];
+        byte[] plainBytes = new byte[cipherBytes.Length];
+
+        using var aes = new AesGcm(sessionKey, tag.Length);
+        aes.Decrypt(nonce, cipherBytes, tag, plainBytes);   // throws if data was tampered with or the key is wrong
+
+        return Encoding.UTF8.GetString(plainBytes);
     }
 
     public void Dispose() => _rsa.Dispose();

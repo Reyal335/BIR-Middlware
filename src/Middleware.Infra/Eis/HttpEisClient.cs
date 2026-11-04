@@ -24,7 +24,7 @@ public class HttpEisClient(
             invoices = invoices.Select(i => i.SignedJws).ToArray()
         });
 
-        var data = eisSigner.Encrypt(plainText);
+        var data = eisSigner.Encrypt(plainText, session.SessionKey);
 
 
     }
