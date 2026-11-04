@@ -54,7 +54,7 @@ public class EisTokenCache(
                     });
 
                     using var rsa = RSA.Create();
-                    rsa.ImportFromPem(opts.BirPublicKey);
+                    rsa.ImportSubjectPublicKeyInfo(Convert.FromBase64String(opts.BirPublicKey), out _);
                     var data = Convert.ToBase64String(
                         rsa.Encrypt(Encoding.UTF8.GetBytes(json), RSAEncryptionPadding.Pkcs1)
                     );

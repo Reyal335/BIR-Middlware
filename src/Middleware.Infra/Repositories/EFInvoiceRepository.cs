@@ -24,7 +24,7 @@ public class EFInvoiceRepository(AppDb db) : IInvoiceRepository
     public async Task<List<Invoice>> FindQueuedInvoices()
     {
         return await _db.Invoice
-                        .Where(I => I.Status == InvoiceStatus.Accepted)
+                        .Where(I => I.Status == InvoiceStatus.Queued)
                         .Take(100)
                         .ToListAsync();
 

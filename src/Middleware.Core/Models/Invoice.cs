@@ -124,7 +124,7 @@ public class Invoice
     // Save JWS and time signed at
     public void AttachSignature(string jws)
     {
-        if (Status != InvoiceStatus.Submitting)
+        if (Status != InvoiceStatus.Queued)
             throw new InvalidOperationException($"Cannot mark save jws data from {Status}");
         SignedJws = jws;
         SignedAt = DateTimeOffset.Now;

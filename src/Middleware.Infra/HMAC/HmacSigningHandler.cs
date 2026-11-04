@@ -37,6 +37,7 @@ public class HmacSigningHandler (IOptions<EisOptions> options) : DelegatingHandl
         request.Headers.Add("applicationId", options.Value.ApplicationId);
         request.Headers.Add("authorization", $"Bearer {messageEnoded}");
 
+        // This is the one that sends the request to the EisAuth
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);
 
         return response;

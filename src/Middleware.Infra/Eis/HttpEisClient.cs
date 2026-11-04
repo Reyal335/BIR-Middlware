@@ -2,19 +2,21 @@ using Middleware.Core.interfaces;
 using Middleware.Core.Models;
 using Middleware.Core.Eis;
 using System.Text.Json;
+using Middleware.Infra.Cache;
 
 namespace Middleware.Infra.Eis;
 
-public class HttpEisClient(EisMapper eisMapper, IEisSigner eisSigner) : IEisClient
+public class HttpEisClient(IHttpClientFactory httpClientFactory, EisTokenCache tokenCache) : IEisClient
 {
     public async Task SubmitBatch(List<Invoice> invoices)
     {
-        // Eis Mapper takes 100 invoices and shapes them to EIS compliant JSON format
+        /** 
+            - Creates a session here if does not exist. Uses the cached session if one exists
+            - Each session lasts for 6 hours
+        **/
+        var session = await tokenCache.GetEisSessionAsync();
 
-        
-        // EisUniqueIdGenerator provides Id for each invoice
 
-        
     }
 
     public async Task GetResults()
