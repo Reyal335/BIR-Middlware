@@ -12,4 +12,13 @@ public class Transmission
     public string? Error { get; private set; }               // timeout, 401, etc.
 
     public List<Invoice> Invoices { get; private set; } = new();
+
+    public static Transmission Create(string submitId, List<Invoice> invoices, DateTimeOffset now) => new()
+    {
+        Id = Guid.NewGuid(),
+        SubmitId = submitId,
+        CreatedAt = now,
+        Status = TransmissionStatus.Created,
+        Invoices = invoices
+    };
 }

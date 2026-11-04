@@ -12,11 +12,10 @@ public class HttpEisClient(
     IHttpClientFactory httpClientFactory, 
     EisTokenCache tokenCache,
     IEisSigner eisSigner,
-    IOptions<EisOptions> eisOptions,
-    IOptions<TimeZoneOptions> tzOptions
+    IOptions<EisOptions> eisOptions
     ) : IEisClient
 {
-    public async Task SubmitBatch(List<Invoice> invoices, CancellationToken ct)
+    public async Task SubmitBatch(string submitId, List<Invoice> invoices, CancellationToken ct)
     {
         /** 
             - Creates a session here if does not exist. Uses the cached session if one exists
@@ -24,7 +23,6 @@ public class HttpEisClient(
         **/
 
         var eisOpts = eisOptions.Value;
-        var tzOpts = tzOptions.Value;
 
         var session = await tokenCache.GetEisSessionAsync(ct);
 
@@ -37,15 +35,8 @@ public class HttpEisClient(
 
         var data = eisSigner.Encrypt(plainText, session.SessionKey);
 
-        
-        TimeZoneInfo manilaTime = TimeZoneInfo.FindSystemTimeZoneById(tzOpts.TimeZone);
-        DateTimeOffset timeNow = TimeZoneInfo.ConvertTime(DateTimeOffset.UtcNow, manilaTime);
-
         if(eisOpts.CertificationNumber is null)
             throw new InvalidOperationException("Certification Number cannot be null");
-
-        // Get submitId
-        string submitId = SubmitIdGenerator.Create(eisOpts.CertificationNumber, timeNow);
 
         var client = httpClientFactory.CreateClient("Eis");
 

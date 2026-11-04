@@ -3,6 +3,8 @@ using Microsoft.Extensions;
 using Middleware.Core.interfaces;
 using Middleware.Core.Models;
 using Middleware.Core.Eis;
+using Middleware.Infra.Eis;
+using Microsoft.Extensions.Options;
 
 namespace Middleware.Core.Services;
 
@@ -11,7 +13,10 @@ public class TransmissionRun(
     IEisClient eisClient,
     IUnitOfWork unitOfWork,
     EisMapper eisMapper,
-    IEisSigner eisSigner)
+    IEisSigner eisSigner,
+    IClock clock,
+    IOptions<EisIdentityOptions> options
+    )
 {
     public async Task ExecuteAsync(CancellationToken ct)
     {
@@ -28,9 +33,16 @@ public class TransmissionRun(
                 // Generate JWS
                 invoice.AttachSignature(eisSigner.Sign(invoiceJson));
 
-            }     
+            }  
+
+            var now = clock.Now;
+            string submitId = SubmitIdGenerator.Create(options.Value.CertId, now);
+            var transmission = Transmission.Create(submitId, invoices, now);
+
+            
+
             // Submit Invoices
-            await eisClient.SubmitBatch(invoices, ct);
+            await eisClient.SubmitBatch(submitId, invoices, ct);
 
             foreach (var invoice in invoices)
                 // Mark invoice as queued

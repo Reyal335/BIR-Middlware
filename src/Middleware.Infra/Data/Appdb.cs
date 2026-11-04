@@ -11,6 +11,7 @@ public class AppDb : DbContext
     }
     public DbSet<Invoice> Invoice { get; set; }
     public DbSet<EisControlCounters> EisControlCounters { get; set; }
+    public DbSet<Transmission> Transmissions => Set<Transmission>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -42,6 +43,16 @@ public class AppDb : DbContext
         {
             e.HasKey(c => c.Name);
             e.HasIndex(i => i.LastValue); 
+        });
+
+        modelBuilder.Entity<Transmission>(e =>
+        {
+            e.HasKey(i => i.Id);
+            e.HasIndex(i => i.SubmitId).IsUnique();
+            e.HasMany(t => t.Invoices)
+            .WithOne()                          // Invoice has no navigation back
+            .HasForeignKey("TransmissionId")    // shadow FK column on Invoices
+            .IsRequired(false);      
         });
     }
 

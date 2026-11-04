@@ -7,9 +7,10 @@ using Middleware.Infra.Data;
 using Middleware.Infra.Eis;
 using Middleware.Infra.Cache;
 using Middleware.Infra.HMAC;
+using Middleware.Infra.Time;
+using Middleware.Infra.Repositories;
 
 using Middleware.Core.interfaces;
-using Middleware.Core.Repositories;
 using Middleware.Core.Services;
 using Middleware.Core.Tax;
 using Middleware.Core.Eis;
@@ -39,8 +40,10 @@ public static class DependencyInjection
 
         // Singleton: the key is loaded once and the RSA instance is disposed with the container
         services.AddSingleton<IEisSigner, EisSigner>();
+        services.AddSingleton<IClock, SystemClock>();
 
         services.AddOptions<EisOptions>().Bind(configuration.GetSection("Eis")).ValidateOnStart();
+        services.AddOptions<EisIdentityOptions>().Bind(configuration.GetSection("Eis")).ValidateOnStart();
         services.AddOptions<TransmissionWorkerOptions>().Bind(configuration.GetSection("TransmissionWorker")).ValidateOnStart();
         services.AddOptions<ResultPollerOptions>().Bind(configuration.GetSection("ResultPoller")).ValidateOnStart();
         services.AddOptions<ComplianceOptions>().Bind(configuration.GetSection("Compliance")).ValidateOnStart();

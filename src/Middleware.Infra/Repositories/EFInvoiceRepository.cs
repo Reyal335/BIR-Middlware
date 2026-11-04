@@ -4,7 +4,7 @@ using Middleware.Core.Models;
 using Middleware.Infra.Data;
 using System.Linq;
 
-namespace Middleware.Core.Repositories;
+namespace Middleware.Infra.Repositories;
 
 public class EFInvoiceRepository(AppDb db) : IInvoiceRepository
 {
