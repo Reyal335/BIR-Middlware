@@ -12,6 +12,8 @@ public class EisOptions
     public TimeSpan TokenRefreshmargin { get; set; }
     public int MaxBatchSize { get; set; }
     public string? AuthSecret { get; set; }
+    public string? CertificationNumber { get; set; }
+
 
     // Identity sent in headers
     public string? AccreditationId { get; set; }
@@ -30,6 +32,11 @@ public class EisOptions
 
     public string? EncryptionKey { get; set; }
 
+}
+
+public class TimeZoneOptions
+{
+    public string TimeZone { get; set; } = "Asia/Manila";
 }
 
 public class TransmissionWorkerOptions

@@ -4,7 +4,7 @@ namespace Middleware.Core.interfaces;
 
 public interface IEisClient
 {
-    Task SubmitBatch(List<Invoice> invoice);
+    Task SubmitBatch(List<Invoice> invoice, CancellationToken ct);
 
     Task GetResults();
 }

@@ -30,14 +30,14 @@ public class TransmissionRun(
 
             }     
             // Submit Invoices
-            await eisClient.SubmitBatch(invoices);
+            await eisClient.SubmitBatch(invoices, ct);
 
             foreach (var invoice in invoices)
                 // Mark invoice as queued
                 invoice.MarkSubmitted();
 
             // Save the signatures before sending
-            await unitOfWork.SaveChangesAsync(ct);
+            await unitOfWork.SaveChangesAsync(CancellationToken.None);
        
         }
         catch

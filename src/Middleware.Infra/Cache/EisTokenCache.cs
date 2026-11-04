@@ -59,7 +59,7 @@ public class EisTokenCache(
                         rsa.Encrypt(Encoding.UTF8.GetBytes(json), RSAEncryptionPadding.Pkcs1)
                     );
 
-
+                    // Post to the auth
                     var response = await client.PostAsJsonAsync(opts.AuthPath, new { data }, ct);
 
                     response.EnsureSuccessStatusCode();

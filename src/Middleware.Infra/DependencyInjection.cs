@@ -44,6 +44,7 @@ public static class DependencyInjection
         services.AddOptions<TransmissionWorkerOptions>().Bind(configuration.GetSection("TransmissionWorker")).ValidateOnStart();
         services.AddOptions<ResultPollerOptions>().Bind(configuration.GetSection("ResultPoller")).ValidateOnStart();
         services.AddOptions<ComplianceOptions>().Bind(configuration.GetSection("Compliance")).ValidateOnStart();
+        services.AddOptions<TimeZoneOptions>().Bind(configuration.GetSection("TimeZone")).ValidateOnStart();
 
         services.AddScoped(sp => new EisUniqueIdGenerator(
             sp.GetRequiredService<IOptions<EisOptions>>().Value.AccreditationId!,
