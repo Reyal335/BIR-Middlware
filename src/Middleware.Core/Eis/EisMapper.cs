@@ -6,7 +6,7 @@ public class EisMapper
 {
     public BirEisInvoicePayload Map(Invoice invoice)
     {
-    
+        
         List<EisLineItem> items = [];
 
         foreach (var item in invoice.Lines)
@@ -31,8 +31,8 @@ public class EisMapper
             Header = new EisHeader
             {
                 InvoiceNumber = invoice.InvoiceNumber,
-                InvoiceDate = invoice.TransactionDateTime.Date.ToString("yyyy-MM-dd"),
-                InvoiceTime = invoice.TransactionDateTime.ToOffset(TimeSpan.FromHours(8)).ToString(),
+                InvoiceDate = TimeZoneInfo.ConvertTime(invoice.TransactionDateTime, TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila")).Date.ToString("yyyy-MM-dd"),
+                InvoiceTime = TimeZoneInfo.ConvertTime(invoice.TransactionDateTime, TimeZoneInfo.FindSystemTimeZoneById("Asia/Manila")).ToString("HH:mm:sszzz"),
                 Currency = "PHP"
             },
             Seller = new EisParty
@@ -52,6 +52,7 @@ public class EisMapper
                 Address = invoice.Customer.Address,
                 BuyerType = invoice.Customer.Type
             },
+            ItemList = items
         };
     }
 }

@@ -30,6 +30,7 @@ public static class DependencyInjection
 
         services.AddScoped<InvoiceIntakeService>();
         services.AddScoped<IInvoiceRepository, EFInvoiceRepository>();
+        services.AddScoped<ITransmissionRepository, EfTransmissionRepository>();
         services.AddScoped<IEisClient, HttpEisClient>();
         services.AddScoped<IEisControlSequence, EisControlSequence>();
         services.AddScoped<TransmissionRun>();
