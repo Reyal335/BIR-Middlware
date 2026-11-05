@@ -54,17 +54,22 @@ public sealed class EisSigner : IEisSigner, IDisposable
 
         byte[] sessionKey = Convert.FromBase64String(sessionKeyString);
 
-        byte[] input = Convert.FromBase64String(data);
+        byte[] plainBytes = Convert.FromBase64String(data);
 
-        byte[] nonce = input[..12];
-        byte[] tag = input[^16..];
-        byte[] cipherBytes = input[12..^16];
-        byte[] plainBytes = new byte[cipherBytes.Length];
+        byte[] nonce = RandomNumberGenerator.GetBytes(12);
+        byte[] cipherBytes = new byte[plainBytes.Length];
+        byte[] tag = new byte[16];
 
         using var aes = new AesGcm(sessionKey, tag.Length);
-        aes.Decrypt(nonce, cipherBytes, tag, plainBytes);   // throws if data was tampered with or the key is wrong
+        aes.Encrypt(nonce, plainBytes, cipherBytes, tag);
 
-        return Encoding.UTF8.GetString(plainBytes);
+        // nonce || ciphertext || tag
+        byte[] output = new byte[nonce.Length + cipherBytes.Length + tag.Length];
+        Buffer.BlockCopy(nonce, 0, output, 0, nonce.Length);
+        Buffer.BlockCopy(cipherBytes, 0, output, nonce.Length, cipherBytes.Length);
+        Buffer.BlockCopy(tag, 0, output, nonce.Length + cipherBytes.Length, tag.Length);
+
+        return Convert.ToBase64String(output);
     }
 
     public void Dispose() => _rsa.Dispose();

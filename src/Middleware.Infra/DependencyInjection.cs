@@ -50,16 +50,16 @@ public static class DependencyInjection
         services.AddOptions<TimeZoneOptions>().Bind(configuration.GetSection("TimeZone")).ValidateOnStart();
 
         services.AddScoped(sp => new EisUniqueIdGenerator(
-            sp.GetRequiredService<IOptions<EisOptions>>().Value.AccreditationId!,
+            sp.GetRequiredService<IOptions<EisOptions>>().Value.CertificationNumber!,
             sp.GetRequiredService<IEisControlSequence>()
         ));
 
-        services.AddHttpClient<IEisClient, HttpEisClient>("Eis", (sp, client) =>
+        services.AddHttpClient("Eis", (sp, client) =>
         {
             var eis = sp.GetRequiredService<IOptions<EisOptions>>();
             client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl ?? "http://localhost:8000");
             client.Timeout = eis.Value.HttpTimeout;
-        });
+        }).AddHttpMessageHandler<HmacSigningHandler>();
 
         services.AddHttpClient("EisAuth", (sp, client) => {
             client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl);

@@ -36,10 +36,8 @@ public class TransmissionRun(
             }  
 
             var now = clock.Now;
-            string submitId = SubmitIdGenerator.Create(options.Value.CertId, now);
+            string submitId = SubmitIdGenerator.Create(options.Value.CertificationNumber, now);
             var transmission = Transmission.Create(submitId, invoices, now);
-
-            
 
             // Submit Invoices
             await eisClient.SubmitBatch(submitId, invoices, ct);

@@ -67,6 +67,12 @@ namespace Middleware.Infra.Migrations
                     b.Property<DateTimeOffset>("ReceivedAt")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTimeOffset?>("SignedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("SignedJws")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Status")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -82,7 +88,12 @@ namespace Middleware.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<Guid?>("TransmissionId")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("TransmissionId");
 
                     b.HasIndex("StoreCode", "PosTerminalId", "InvoiceNumber")
                         .IsUnique();
@@ -90,8 +101,48 @@ namespace Middleware.Infra.Migrations
                     b.ToTable("Invoice");
                 });
 
+            modelBuilder.Entity("Middleware.Core.Models.Transmission", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Error")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ReferenceNo")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("ResponseAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("SentAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("SubmitId")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SubmitId")
+                        .IsUnique();
+
+                    b.ToTable("Transmissions");
+                });
+
             modelBuilder.Entity("Middleware.Core.Models.Invoice", b =>
                 {
+                    b.HasOne("Middleware.Core.Models.Transmission", null)
+                        .WithMany("Invoices")
+                        .HasForeignKey("TransmissionId");
+
                     b.OwnsOne("Middleware.Core.Models.CustomerInfo", "Customer", b1 =>
                         {
                             b1.Property<int>("InvoiceId")
@@ -298,6 +349,11 @@ namespace Middleware.Infra.Migrations
 
                     b.Navigation("Totals")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Middleware.Core.Models.Transmission", b =>
+                {
+                    b.Navigation("Invoices");
                 });
 #pragma warning restore 612, 618
         }

@@ -3,5 +3,5 @@ namespace Middleware.Core.Eis;
 
 public sealed class EisIdentityOptions
 {
-    public string CertId { get; init; } = default!;
+    public string CertificationNumber { get; init; } = default!;
 }
