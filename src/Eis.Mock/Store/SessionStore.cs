@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 
 namespace Eis.Mock.Store;
@@ -15,5 +16,8 @@ public class SessionStore
         sessions.AddOrUpdate(key, value, (k, oldValue) => value);
     }
 
-    
+    public bool TryGetSession(string key, [MaybeNullWhen(false)] out SessionDetails value)
+    {
+        return sessions.TryGetValue(key, out value);
+    }
 }

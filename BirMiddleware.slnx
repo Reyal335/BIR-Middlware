@@ -6,4 +6,7 @@
     <Project Path="src/Middleware.Infra/Middleware.Infra.csproj" />
     <Project Path="src/POS.Simulator/POS.Simulator.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Eis.Mock.Tests/Eis.Mock.Tests.csproj" />
+  </Folder>
 </Solution>

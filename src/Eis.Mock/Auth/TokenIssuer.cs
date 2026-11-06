@@ -12,8 +12,9 @@ public class TokenIssuer (SessionStore sessionStore) : ITokenIssuer
         string allowedChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         string authToken = RandomNumberGenerator.GetString(allowedChars, 32);
 
-        string allowedCharSymbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789%/+=@-";
-        string sessionKey = RandomNumberGenerator.GetString(allowedCharSymbols, 32);
+        // Base64 of 32 random bytes: the middleware Base64-decodes it into an AES-256-GCM key,
+        // and both sides use the UTF-8 bytes of this string as the HMAC key
+        string sessionKey = Convert.ToBase64String(RandomNumberGenerator.GetBytes(32));
 
         string manilaTimezone = "Asia/Manila";
         TimeZoneInfo manilaZone = TimeZoneInfo.FindSystemTimeZoneById(manilaTimezone);
