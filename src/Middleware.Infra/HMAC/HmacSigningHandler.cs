@@ -10,13 +10,18 @@ using Microsoft.Extensions.Options;
 
 namespace Middleware.Infra.HMAC;
 
-public class HmacSigningHandler (IOptions<EisOptions> options) : DelegatingHandler
+public class HmacSigningHandler (
+    IOptions<EisOptions> options,
+    Func<CancellationToken, ValueTask<string>> resolveKey) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken
     )
     {
+        // Key differs per client: ApplicationSecretKey for EisAuth, SessionKey for Eis
+        string signingKey = await resolveKey(cancellationToken);
+
         string manilaTimezone = "Asia/Manila";
         TimeZoneInfo manilaZone = TimeZoneInfo.FindSystemTimeZoneById(manilaTimezone);
         DateTime manilaTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, manilaZone);
@@ -27,7 +32,7 @@ public class HmacSigningHandler (IOptions<EisOptions> options) : DelegatingHandl
         string message = $"{dateMessage}/{request.Method.Method}/{request.RequestUri!.AbsolutePath}";
 
         byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-        byte[] keyBytes = Encoding.UTF8.GetBytes(options.Value.ApplicationSecretKey);
+        byte[] keyBytes = Encoding.UTF8.GetBytes(signingKey);
 
         byte[] hashBytes = HMACSHA256.HashData(keyBytes, messageBytes);
         string messageEnoded = System.Convert.ToBase64String(hashBytes);

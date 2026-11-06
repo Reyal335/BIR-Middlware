@@ -26,8 +26,6 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("DefaultConnection");
         services.AddSqlite<AppDb>(connectionString);
 
-        services.AddTransient<HmacSigningHandler>();
-
         services.AddScoped<InvoiceIntakeService>();
         services.AddScoped<IInvoiceRepository, EFInvoiceRepository>();
         services.AddScoped<ITransmissionRepository, EfTransmissionRepository>();
@@ -42,6 +40,7 @@ public static class DependencyInjection
         // Singleton: the key is loaded once and the RSA instance is disposed with the container
         services.AddSingleton<IEisSigner, EisSigner>();
         services.AddSingleton<IClock, SystemClock>();
+        services.AddSingleton<EisTokenCache>();
 
         services.AddOptions<EisOptions>().Bind(configuration.GetSection("Eis")).ValidateOnStart();
         services.AddOptions<EisIdentityOptions>().Bind(configuration.GetSection("Eis")).ValidateOnStart();
@@ -60,13 +59,28 @@ public static class DependencyInjection
             var eis = sp.GetRequiredService<IOptions<EisOptions>>();
             client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl ?? "http://localhost:8000");
             client.Timeout = eis.Value.HttpTimeout;
-        }).AddHttpMessageHandler<HmacSigningHandler>();
+        }).AddHttpMessageHandler(sp =>
+        {
+            // Main EIS calls are signed with the SessionKey from the current auth session
+            var opts = sp.GetRequiredService<IOptions<EisOptions>>();
+            var tokenCache = sp.GetRequiredService<EisTokenCache>();
+            return new HmacSigningHandler(opts,
+                async ct => (await tokenCache.GetEisSessionAsync(ct)).SessionKey);
+        });
 
         services.AddHttpClient("EisAuth", (sp, client) => {
-            client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl);
-        }).AddHttpMessageHandler<HmacSigningHandler>();
+            client.BaseAddress = new Uri(sp.GetRequiredService<IOptions<EisOptions>>().Value.BaseUrl ?? "http://localhost:8000");
+        }).AddHttpMessageHandler(sp =>
+        {
+            // Auth calls are signed with the static ApplicationSecretKey.
+            // Must NOT use EisTokenCache here: the cache calls this client, so it would deadlock.
+            var opts = sp.GetRequiredService<IOptions<EisOptions>>();
+            return new HmacSigningHandler(opts,
+                _ => ValueTask.FromResult(opts.Value.ApplicationSecretKey
+                    ?? throw new InvalidOperationException("Eis:ApplicationSecretKey is not configured")));
+        });
 
-        services.AddSingleton<EisTokenCache>();
+        
 
         return services;
     }
