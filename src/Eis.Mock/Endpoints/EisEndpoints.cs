@@ -15,6 +15,9 @@ public class EisController : Controller
         _authService = authService;
     }
 
+    /** 
+        Authentication Endpoint
+    **/
     [Route("authentication")]
     [HttpPost]
     public IActionResult AuthenticateSystem(
@@ -34,6 +37,9 @@ public class EisController : Controller
         return Ok(new { status = "200", data = result.data });
     }
 
+    /**
+        Invoice Issuance endpoint 
+    **/
     [Route("invoices")]
     [HttpPost]
     public IActionResult InvoiceInsurance()
