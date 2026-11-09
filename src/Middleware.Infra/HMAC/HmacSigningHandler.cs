@@ -10,17 +10,25 @@ using Microsoft.Extensions.Options;
 
 namespace Middleware.Infra.HMAC;
 
+/// <summary>
+/// SigningKey keys the HMAC. BearerToken, when set, is sent as "authorization: Bearer {token}";
+/// it is null for the auth call, which happens before a token exists.
+/// </summary>
+public sealed record HmacCredentials(string SigningKey, string? BearerToken);
+
 public class HmacSigningHandler (
     IOptions<EisOptions> options,
-    Func<CancellationToken, ValueTask<string>> resolveKey) : DelegatingHandler
+    Func<CancellationToken, ValueTask<HmacCredentials>> resolveCredentials) : DelegatingHandler
 {
     protected override async Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken
     )
     {
-        // Key differs per client: ApplicationSecretKey for EisAuth, SessionKey for Eis
-        string signingKey = await resolveKey(cancellationToken);
+        // Differs per client: ApplicationSecretKey and no token for EisAuth,
+        // SessionKey and AuthToken from the current session for Eis
+        HmacCredentials credentials = await resolveCredentials(cancellationToken);
+        string signingKey = credentials.SigningKey;
 
         string manilaTimezone = "Asia/Manila";
         TimeZoneInfo manilaZone = TimeZoneInfo.FindSystemTimeZoneById(manilaTimezone);
@@ -40,7 +48,10 @@ public class HmacSigningHandler (
         request.Headers.Add("datetime", dateMessage);
         request.Headers.Add("accreditationId", options.Value.AccreditationId);
         request.Headers.Add("applicationId", options.Value.ApplicationId);
-        request.Headers.Add("authorization", $"Bearer {messageEnoded}");
+        request.Headers.Add("signature", messageEnoded);
+
+        if (credentials.BearerToken is not null)
+            request.Headers.Add("authorization", $"Bearer {credentials.BearerToken}");
 
         // This is the one that sends the request to the EisAuth
         HttpResponseMessage response = await base.SendAsync(request, cancellationToken);

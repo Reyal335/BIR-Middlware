@@ -17,7 +17,16 @@ public sealed class EisMockFactory : WebApplicationFactory<Program>
 {
     private readonly RSA signingKey = RSA.Create(2048);
 
+    // Encrypts the auth request: middleware holds the public half (Eis:BirPublicKey), the mock the private half
+    private readonly RSA authKey = RSA.Create(2048);
+
     public EisSigner Signer { get; }
+
+    /// <summary>Middleware's Eis:SigningKey (Base64 PKCS#8).</summary>
+    public string SigningPrivateKey => Convert.ToBase64String(signingKey.ExportPkcs8PrivateKey());
+
+    /// <summary>Middleware's Eis:BirPublicKey (Base64 SubjectPublicKeyInfo).</summary>
+    public string AuthPublicKey => Convert.ToBase64String(authKey.ExportSubjectPublicKeyInfo());
 
     public EisMockFactory()
     {
@@ -37,6 +46,7 @@ public sealed class EisMockFactory : WebApplicationFactory<Program>
         builder.ConfigureAppConfiguration((_, config) => config.AddInMemoryCollection(new Dictionary<string, string?>
         {
             ["Mock:SigningPublicKey"] = Convert.ToBase64String(signingKey.ExportSubjectPublicKeyInfo()),
+            ["Mock:EisPrivateKey"] = Convert.ToBase64String(authKey.ExportPkcs8PrivateKey()),
         }));
     }
 
@@ -53,6 +63,7 @@ public sealed class EisMockFactory : WebApplicationFactory<Program>
         {
             Signer.Dispose();
             signingKey.Dispose();
+            authKey.Dispose();
         }
     }
 }

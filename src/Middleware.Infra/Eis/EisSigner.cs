@@ -54,11 +54,12 @@ public sealed class EisSigner : IEisSigner, IDisposable
 
         byte[] sessionKey = Convert.FromBase64String(sessionKeyString);
 
-        byte[] plainBytes = Convert.FromBase64String(data);
+        // data is plain JSON text, not Base64
+        byte[] plainBytes = Encoding.UTF8.GetBytes(data);
 
-        byte[] nonce = RandomNumberGenerator.GetBytes(12);
+        byte[] nonce = RandomNumberGenerator.GetBytes(NonceSize);
         byte[] cipherBytes = new byte[plainBytes.Length];
-        byte[] tag = new byte[16];
+        byte[] tag = new byte[TagSize];
 
         using var aes = new AesGcm(sessionKey, tag.Length);
         aes.Encrypt(nonce, plainBytes, cipherBytes, tag);

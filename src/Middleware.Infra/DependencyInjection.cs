@@ -61,11 +61,14 @@ public static class DependencyInjection
             client.Timeout = eis.Value.HttpTimeout;
         }).AddHttpMessageHandler(sp =>
         {
-            // Main EIS calls are signed with the SessionKey from the current auth session
+            // Main EIS calls are signed with the SessionKey and carry the AuthToken of the current auth session
             var opts = sp.GetRequiredService<IOptions<EisOptions>>();
             var tokenCache = sp.GetRequiredService<EisTokenCache>();
-            return new HmacSigningHandler(opts,
-                async ct => (await tokenCache.GetEisSessionAsync(ct)).SessionKey);
+            return new HmacSigningHandler(opts, async ct =>
+            {
+                var session = await tokenCache.GetEisSessionAsync(ct);
+                return new HmacCredentials(session.SessionKey, session.AuthToken);
+            });
         });
 
         services.AddHttpClient("EisAuth", (sp, client) => {
@@ -76,8 +79,10 @@ public static class DependencyInjection
             // Must NOT use EisTokenCache here: the cache calls this client, so it would deadlock.
             var opts = sp.GetRequiredService<IOptions<EisOptions>>();
             return new HmacSigningHandler(opts,
-                _ => ValueTask.FromResult(opts.Value.ApplicationSecretKey
-                    ?? throw new InvalidOperationException("Eis:ApplicationSecretKey is not configured")));
+                _ => ValueTask.FromResult(new HmacCredentials(
+                    opts.Value.ApplicationSecretKey
+                        ?? throw new InvalidOperationException("Eis:ApplicationSecretKey is not configured"),
+                    BearerToken: null)));
         });
 
         

@@ -52,7 +52,18 @@ public class EisMapper
                 Address = invoice.Customer.Address,
                 BuyerType = invoice.Customer.Type
             },
-            ItemList = items
+            ItemList = items,
+            // Totals were computed by the TaxEngine at intake; TotalDue already has the SC/PWD discount applied
+            TaxSummary = new EisTaxSummary
+            {
+                VatableSales = invoice.Totals.VatableSales,
+                VatExemptSales = invoice.Totals.VatExemptSales,
+                ZeroRatedSales = invoice.Totals.ZeroRatedSales,
+                VatAmount = invoice.Totals.VatAmount,
+                ScPwdDiscount = invoice.Totals.ScPwdDiscount,
+                OtherDiscount = invoice.Totals.OtherDiscount,
+                TotalAmountDue = invoice.Totals.TotalDue
+            }
         };
     }
 }
