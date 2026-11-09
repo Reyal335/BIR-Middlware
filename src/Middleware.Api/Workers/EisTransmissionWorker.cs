@@ -30,11 +30,23 @@ public class EisTransmissionWorker : BackgroundService
         {
             _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
 
-            // Scoped per iteration so the DbContext is released before the delay
-            await using (AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope())
+            try
             {
+                // Scoped per iteration so the DbContext is released before the delay.
+                // Created inside the try so DI/DB setup failures are logged too.
+                await using AsyncServiceScope scope = _serviceScopeFactory.CreateAsyncScope();
                 TransmissionRun transmissionRun = scope.ServiceProvider.GetRequiredService<TransmissionRun>();
                 await transmissionRun.ExecuteAsync(stoppingToken);
+            }
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
+            {
+                // Normal shutdown, not an error
+                break;
+            }
+            catch (Exception ex)
+            {
+                // Last-resort safety net: a failed run must not stop the host. Retried next cycle.
+                _logger.LogError(ex, "EIS transmission run failed; will retry next cycle.");
             }
 
             // Simulate background work (e.g., polling a database,   processing a queue)

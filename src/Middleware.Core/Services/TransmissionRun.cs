@@ -23,36 +23,32 @@ public class TransmissionRun(
         // Get due invoices
         List<Invoice> invoices = await invoiceRepository.FindQueuedInvoices();
 
-        try
+        // Nothing queued: don't send an empty batch (the EIS rejects 0 invoices)
+        if (invoices.Count == 0)
+            return;
+
+        // Errors propagate to EisTransmissionWorker, which logs them and retries next cycle
+        foreach (var invoice in invoices)
         {
-            foreach (var invoice in invoices)
-            {
-                // Map invoice first before serializing
-                var invoiceJson = EisJson.Serialize(eisMapper.Map(invoice));
+            // Map invoice first before serializing
+            var invoiceJson = EisJson.Serialize(eisMapper.Map(invoice));
 
-                // Generate JWS
-                invoice.AttachSignature(eisSigner.Sign(invoiceJson));
-
-            }  
-
-            var now = clock.Now;
-            string submitId = SubmitIdGenerator.Create(options.Value.CertificationNumber, now);
-            var transmission = Transmission.Create(submitId, invoices, now);
-
-            // Submit Invoices
-            await eisClient.SubmitBatch(submitId, invoices, ct);
-
-            foreach (var invoice in invoices)
-                // Mark invoice as queued
-                invoice.MarkSubmitted();
-
-            // Save the signatures before sending
-            await unitOfWork.SaveChangesAsync(CancellationToken.None);
-       
+            // Generate JWS
+            invoice.AttachSignature(eisSigner.Sign(invoiceJson));
         }
-        catch
-        {
-            throw new InvalidOperationException("Something went wront ");
-        }
+
+        var now = clock.Now;
+        string submitId = SubmitIdGenerator.Create(options.Value.CertificationNumber, now);
+        var transmission = Transmission.Create(submitId, invoices, now);
+
+        // Submit Invoices
+        await eisClient.SubmitBatch(submitId, invoices, ct);
+
+        foreach (var invoice in invoices)
+            // Mark invoice as submitted
+            invoice.MarkSubmitted();
+
+        // Save the signatures and the new statuses
+        await unitOfWork.SaveChangesAsync(CancellationToken.None);
     }
 }
