@@ -27,6 +27,7 @@ public static class DependencyInjection
         services.AddSqlite<AppDb>(connectionString);
 
         services.AddScoped<InvoiceIntakeService>();
+        services.AddScoped<TransmissionRun>();
         services.AddScoped<IInvoiceRepository, EFInvoiceRepository>();
         services.AddScoped<ITransmissionRepository, EfTransmissionRepository>();
         services.AddScoped<IEisClient, HttpEisClient>();
