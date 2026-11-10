@@ -4,5 +4,5 @@ namespace Middleware.Core.interfaces;
 
 public interface ITransmissionRepository
 {
-    void Add(Transmission transmission);
+    public Task Add(Transmission transmission);
 }

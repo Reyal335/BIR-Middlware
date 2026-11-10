@@ -21,4 +21,23 @@ public class Transmission
         Status = TransmissionStatus.Created,
         Invoices = invoices
     };
+
+    public void MarkSent(DateTimeOffset Now)
+    {
+        Status = TransmissionStatus.Sent;
+    }
+    public void Acknowledge(DateTimeOffset Now)
+    {
+        Status = TransmissionStatus.Acknowledged;
+    }
+    public void MarkUncertain(string message)
+    {
+        Status = TransmissionStatus.Uncertain;
+        Error = message;
+    }
+    public void Fail(string message)
+    {
+        Status = TransmissionStatus.Failed;
+        Error = message;
+    }
 }
