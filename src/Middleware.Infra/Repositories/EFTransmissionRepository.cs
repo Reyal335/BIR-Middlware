@@ -19,4 +19,15 @@ public class EfTransmissionRepository(AppDb db) : ITransmissionRepository
         // Sorted in memory: the SQLite provider can't ORDER BY a DateTimeOffset column
         return unfinished.OrderBy(t => t.CreatedAt).ToList();
     }
+
+    public async Task<List<Transmission>> FindAwaitingResultsAsync()
+    {
+        var awaiting = await db.Transmissions
+            .Include(t => t.Invoices)    // results are applied to these by EIS unique ID
+            .Where(t => t.Status == TransmissionStatus.Sent || t.Status == TransmissionStatus.Acknowledged)
+            .ToListAsync();
+
+        // Sorted in memory: the SQLite provider can't ORDER BY a DateTimeOffset column
+        return awaiting.OrderBy(t => t.CreatedAt).ToList();
+    }
 }

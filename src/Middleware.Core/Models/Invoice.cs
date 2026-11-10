@@ -1,5 +1,6 @@
 // Middleware.Core/Models/Invoice.cs
 using Middleware.Core.DTO;
+using Middleware.Core.Eis;
 using Middleware.Core.Models;
 using Middleware.Core.Tax;
 
@@ -36,6 +37,11 @@ public class Invoice
     public required string EisUniqueId { get; init; }
     public string? SignedJws { get; private set; }
     public DateTimeOffset? SignedAt { get; private set; }
+
+    // ── EIS result (from the Inquiry Result API) ─────────
+    public string? EisResultCode { get; private set; }      // INV000 = accepted, anything else = rejected
+    public string? EisResultMessage { get; private set; }
+    public DateTimeOffset? ResultAt { get; private set; }
     private Invoice() { } // EF only
 
     // ── Creation: DTO -> domain ───────────────────────────
@@ -130,13 +136,17 @@ public class Invoice
         SignedAt = DateTimeOffset.Now;
     }
 
-    //
-    public void ApplyEisResult(bool accepted, string? eisUniqueId)
+    // Record the per-invoice result from the EIS. Any code other than INV000 is a rejection,
+    // including INV003 (duplicate unique ID), which should never happen because resends reuse the submitId
+    public void ApplyEisResult(string code, string message, DateTimeOffset now)
     {
-        if (Status != InvoiceStatus.Queued)
+        if (Status != InvoiceStatus.Submitting)
             throw new InvalidOperationException($"Cannot apply EIS result from {Status}");
-        AttemptCount++;
-        Status = accepted ? InvoiceStatus.Accepted : InvoiceStatus.Rejected;
+
+        EisResultCode = code;
+        EisResultMessage = message;
+        ResultAt = now;
+        Status = code == EisResultCodes.Accepted ? InvoiceStatus.Accepted : InvoiceStatus.Rejected;
     }
 
     private static TaxType ToTaxClass(bool vatable, taxType? t) => vatable

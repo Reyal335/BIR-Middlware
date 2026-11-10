@@ -45,6 +45,12 @@ namespace Middleware.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("EisResultCode")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EisResultMessage")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("EisUniqueId")
                         .IsRequired()
                         .HasColumnType("TEXT");
@@ -65,6 +71,9 @@ namespace Middleware.Infra.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset>("ReceivedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("ResultAt")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset?>("SignedAt")
@@ -105,6 +114,9 @@ namespace Middleware.Infra.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTimeOffset?>("CompletedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<DateTimeOffset>("CreatedAt")

@@ -13,7 +13,8 @@ builder.Services.AddControllers();
 
 
 builder.Services.AddInfrastructure(builder.Configuration);
-builder.Services.AddHostedService<EisTransmissionWorker>();   
+builder.Services.AddHostedService<EisTransmissionWorker>();
+builder.Services.AddHostedService<EisResultPollerWorker>();
 
 var app = builder.Build();
 

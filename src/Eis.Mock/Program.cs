@@ -20,8 +20,10 @@ builder.Services.AddSingleton<SubmissionStore>();
 builder.Services.AddSingleton<InvoiceValidationQueue>();
 builder.Services.AddSingleton<JwsVerifier>();
 builder.Services.AddSingleton<InvoiceValidationService>();
+builder.Services.AddTransient<RequestAuthenticator>();
 builder.Services.AddTransient<IssuanceRequestValidator>();
 builder.Services.AddTransient<IIssuanceService, IssuanceService>();
+builder.Services.AddTransient<IInquiryService, InquiryService>();
 builder.Services.AddHostedService<InvoiceValidationWorker>();
 
 builder.Services.AddControllers();

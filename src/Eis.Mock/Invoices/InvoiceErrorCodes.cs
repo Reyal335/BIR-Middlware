@@ -32,6 +32,9 @@ public static class InvoiceErrorCodes
  
     /// <summary>400 — Invoice count must be 1–100.</summary>
     public const string InvalidInvoiceCount = "REQ005";
+
+    /// <summary>404 — No submission with this submitId (inquiry).</summary>
+    public const string SubmitIdNotFound = "REQ006";
  
     // System (HTTP 500)
  

@@ -122,15 +122,36 @@ public static class IssuanceKit
         if (token is not null)
             request.Headers.TryAddWithoutValidation("authorization", $"Bearer {token}");
         if (signingKey is not null)
-            request.Headers.Add("signature", Hmac(dt, signingKey));
+            request.Headers.Add("signature", Hmac(dt, "POST", Path, signingKey));
 
         return request;
     }
 
-    public static string Hmac(string datetime, string key) =>
+    public const string InquiryPath = "/api/v2/invoice_result";
+
+    /// <summary>A GET to /api/v2/invoice_result/{submitId}, signed like HmacSigningHandler does.</summary>
+    public static HttpRequestMessage InquiryRequest(string submitId, string? token, string? signingKey, DateTimeOffset? datetime = null)
+    {
+        string dt = $"{datetime ?? ManilaNow:yyyyMMddHHmmss}";
+        string path = $"{InquiryPath}/{submitId}";
+
+        var request = new HttpRequestMessage(HttpMethod.Get, path);
+        request.Headers.Add("datetime", dt);
+        request.Headers.Add("accreditationId", "ACC-TEST-001");
+        request.Headers.Add("applicationId", "APP-GAP");
+        if (token is not null)
+            request.Headers.TryAddWithoutValidation("authorization", $"Bearer {token}");
+        if (signingKey is not null)
+            request.Headers.Add("signature", Hmac(dt, "GET", path, signingKey));
+
+        return request;
+    }
+
+    /// <summary>HmacSigningHandler's string-to-sign: "{datetime}/{METHOD}/{AbsolutePath}".</summary>
+    public static string Hmac(string datetime, string method, string path, string key) =>
         Convert.ToBase64String(HMACSHA256.HashData(
             Encoding.UTF8.GetBytes(key),
-            Encoding.UTF8.GetBytes($"{datetime}/POST/{Path}")));
+            Encoding.UTF8.GetBytes($"{datetime}/{method}/{path}")));
 
     /// <summary>Sends a fully valid request for the given JWS strings.</summary>
     public static Task<HttpResponseMessage> SubmitAsync(

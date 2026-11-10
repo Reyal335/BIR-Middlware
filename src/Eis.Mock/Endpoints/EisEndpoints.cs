@@ -11,11 +11,13 @@ public class EisController : Controller
 {
     private readonly IAuthService _authService;
     private readonly IIssuanceService _issuanceService;
+    private readonly IInquiryService _inquiryService;
 
-    public EisController(IAuthService authService, IIssuanceService issuanceService)
+    public EisController(IAuthService authService, IIssuanceService issuanceService, IInquiryService inquiryService)
     {
         _authService = authService;
         _issuanceService = issuanceService;
+        _inquiryService = inquiryService;
     }
 
     /** 
@@ -69,10 +71,28 @@ public class EisController : Controller
         return Ok(new { data = result.Data });
     }
 
+    /**
+        Inquiry Result endpoint
+    **/
     [Route("invoice_result/{submitId}")]
     [HttpGet]
-    public IActionResult GetInvoiceResult()
+    [TypeFilter(typeof(SystemErrorFilter))]
+    public IActionResult GetInvoiceResult(string submitId)
     {
-        return Ok(new {message = "nice"});
+        var result = _inquiryService.GetResults(new InquiryRequest(
+            Authorization: Request.Headers.Authorization,
+            Signature: Request.Headers["signature"],
+            Datetime: Request.Headers["datetime"],
+            Method: Request.Method,
+            Path: $"{Request.PathBase}{Request.Path}",
+            SubmitId: submitId));
+
+        if (result.Error is not null)
+        {
+            return StatusCode(result.StatusCode,
+                new { error_code = result.Error.Code, message = result.Error.Message, submitId = result.SubmitId });
+        }
+
+        return Ok(new { data = result.Data });
     }
 }

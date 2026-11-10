@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "KXkn8IosNNk=",
+  "dgSpecHash": "33xkEtQW/88=",
   "success": true,
   "projectFilePath": "D:\\UsersMigrate\\Sam\\Desktop\\BIR_EIS\\src\\POS.Simulator\\POS.Simulator.csproj",
   "expectedPackageFiles": [
@@ -24,7 +24,7 @@
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.hosting.abstractions\\10.0.12\\microsoft.extensions.hosting.abstractions.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.http\\10.0.12\\microsoft.extensions.http.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging\\10.0.12\\microsoft.extensions.logging.10.0.12.nupkg.sha512",
-    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.12\\microsoft.extensions.logging.abstractions.10.0.12.nupkg.sha512",
+    "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\10.0.13\\microsoft.extensions.logging.abstractions.10.0.13.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.configuration\\10.0.12\\microsoft.extensions.logging.configuration.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.console\\10.0.12\\microsoft.extensions.logging.console.10.0.12.nupkg.sha512",
     "C:\\Users\\91460\\.nuget\\packages\\microsoft.extensions.logging.debug\\10.0.12\\microsoft.extensions.logging.debug.10.0.12.nupkg.sha512",

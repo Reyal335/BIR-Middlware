@@ -15,7 +15,7 @@ namespace Eis.Mock.Tests;
 /// <summary>
 /// Runs the middleware's own code end to end against the in-memory mock: AddInfrastructure wiring,
 /// TaxEngine, Invoice, EisMapper, EisJson, EisSigner, EisTokenCache (real authentication),
-/// HmacSigningHandler and HttpEisClient.SubmitBatch.
+/// HmacSigningHandler, HttpEisClient.SubmitBatch and HttpEisClient.GetResults.
 /// </summary>
 public class MiddlewareContractTests(EisMockFactory factory) : IClassFixture<EisMockFactory>
 {
@@ -70,14 +70,53 @@ public class MiddlewareContractTests(EisMockFactory factory) : IClassFixture<Eis
         Assert.Equal("RECEIVED", receipt.Status);
         Assert.Equal($"{stored.ReceivedAt:yyyy-MM-ddTHH:mm:ss}", receipt.ReceivedAt);
 
-        var batch = await WaitForCompletionAsync(factory.Submissions, submitId);
+        // Second round trip: the middleware asks for results until the batch is COMPLETED
+        EisInquiryResult inquiry = await PollResultsAsync(provider, submitId);
 
-        Assert.Equal(2, batch.InvoiceCount);
+        Assert.Equal(stored.ReferenceNo, inquiry.ReferenceNo);
+        Assert.Equal(2, inquiry.Results.Count);
         foreach (var invoice in invoices)
         {
-            var result = batch.Results[invoice.EisUniqueId];
-            Assert.True(result.Code == InvoiceResultCodes.Accepted,
-                $"{invoice.InvoiceNumber}: expected {InvoiceResultCodes.Accepted}, got {result.Code} ({result.Message})");
+            var result = Assert.Single(inquiry.Results, r => r.UniqueId == invoice.EisUniqueId);
+            Assert.True(result.Code == EisResultCodes.Accepted,
+                $"{invoice.InvoiceNumber}: expected {EisResultCodes.Accepted}, got {result.Code} ({result.Message})");
+        }
+    }
+
+    [Fact]
+    public async Task Inquiry_for_an_unknown_submission_throws_EisSubmissionNotFoundException()
+    {
+        using var provider = BuildMiddleware();
+        string submitId = SubmitIdGenerator.Create(CertificationNumber, ManilaNow);
+
+        using var scope = provider.CreateScope();
+        var client = scope.ServiceProvider.GetRequiredService<IEisClient>();
+
+        var ex = await Assert.ThrowsAsync<EisSubmissionNotFoundException>(
+            () => client.GetResults(submitId, CancellationToken.None));
+        Assert.Equal(submitId, ex.SubmitId);
+    }
+
+    private static async Task<EisInquiryResult> PollResultsAsync(ServiceProvider provider, string submitId)
+    {
+        var deadline = DateTime.UtcNow.AddSeconds(10);
+        while (true)
+        {
+            using var scope = provider.CreateScope();
+            var result = await scope.ServiceProvider.GetRequiredService<IEisClient>()
+                .GetResults(submitId, CancellationToken.None);
+
+            Assert.Equal(submitId, result.SubmitId);
+            if (result.Status == EisBatchStatus.Completed)
+                return result;
+
+            // Still validating: no results are returned yet
+            Assert.Equal(EisBatchStatus.Received, result.Status);
+            Assert.Empty(result.Results);
+
+            if (DateTime.UtcNow > deadline)
+                throw new TimeoutException($"Submission {submitId} was not COMPLETED within 10 seconds.");
+            await Task.Delay(25);
         }
     }
 
@@ -89,6 +128,7 @@ public class MiddlewareContractTests(EisMockFactory factory) : IClassFixture<Eis
             ["Eis:BaseUrl"] = "http://localhost",
             ["Eis:AuthPath"] = "/api/v2/authentication",
             ["Eis:SubmitPath"] = IssuanceKit.Path,
+            ["Eis:ResultPath"] = InquiryPath,
             ["Eis:CertificationNumber"] = CertificationNumber,
             ["Eis:AccreditationId"] = "ACC-TEST-001",
             ["Eis:ApplicationId"] = "APP-GAP",
