@@ -73,5 +73,27 @@ public sealed class EisSigner : IEisSigner, IDisposable
         return Convert.ToBase64String(output);
     }
 
+    /// <summary>Reverses Encrypt: Base64( nonce || ciphertext || tag ) → UTF-8 text.</summary>
+    public string Decrypt(string data, string sessionKeyString)
+    {
+        byte[] sessionKey = Convert.FromBase64String(sessionKeyString);
+        byte[] input = Convert.FromBase64String(data);
+
+        if (input.Length < NonceSize + TagSize)
+            throw new CryptographicException("Encrypted data is too short.");
+
+        int cipherLength = input.Length - NonceSize - TagSize;
+        byte[] plainBytes = new byte[cipherLength];
+
+        using var aes = new AesGcm(sessionKey, TagSize);
+        aes.Decrypt(
+            input.AsSpan(0, NonceSize),
+            input.AsSpan(NonceSize, cipherLength),
+            input.AsSpan(NonceSize + cipherLength, TagSize),
+            plainBytes);   // throws if the tag doesn't match (wrong key or tampered data)
+
+        return Encoding.UTF8.GetString(plainBytes);
+    }
+
     public void Dispose() => _rsa.Dispose();
 }

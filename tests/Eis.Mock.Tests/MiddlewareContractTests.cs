@@ -54,12 +54,21 @@ public class MiddlewareContractTests(EisMockFactory factory) : IClassFixture<Eis
 
         string submitId = SubmitIdGenerator.Create(CertificationNumber, ManilaNow);
 
+        EisReceipt receipt;
         using (var scope = provider.CreateScope())
         {
-            // Throws on any non-2xx response
-            await scope.ServiceProvider.GetRequiredService<IEisClient>()
+            // Throws on any non-2xx response; decrypts the receipt with the session key
+            receipt = await scope.ServiceProvider.GetRequiredService<IEisClient>()
                 .SubmitBatch(submitId, invoices, CancellationToken.None);
         }
+
+        // The decrypted receipt matches what the mock stored for this submission
+        Assert.True(factory.Submissions.TryGet(submitId, out var stored));
+        Assert.Equal(submitId, receipt.SubmitId);
+        Assert.Equal(stored.ReferenceNo, receipt.ReferenceNo);
+        Assert.Equal(2, receipt.InvoiceCount);
+        Assert.Equal("RECEIVED", receipt.Status);
+        Assert.Equal($"{stored.ReceivedAt:yyyy-MM-ddTHH:mm:ss}", receipt.ReceivedAt);
 
         var batch = await WaitForCompletionAsync(factory.Submissions, submitId);
 

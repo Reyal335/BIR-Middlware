@@ -15,7 +15,7 @@ public class HttpEisClient(
     IOptions<EisOptions> eisOptions
     ) : IEisClient
 {
-    public async Task SubmitBatch(string submitId, List<Invoice> invoices, CancellationToken ct)
+    public async Task<EisReceipt> SubmitBatch(string submitId, List<Invoice> invoices, CancellationToken ct)
     {
         /** 
             - Creates a session here if does not exist. Uses the cached session if one exists
@@ -43,6 +43,17 @@ public class HttpEisClient(
         var response = await client.PostAsJsonAsync(eisOpts.SubmitPath, new { submitId, data }, ct);
         response.EnsureSuccessStatusCode();
 
+        // Body is { data }: the receipt, encrypted with the same session key as the request
+        var reply = await response.Content.ReadFromJsonAsync<EisAuthReply>(ct)
+            ?? throw new InvalidOperationException("EIS returned an empty response body.");
+
+        var receipt = JsonSerializer.Deserialize<EisReceipt>(eisSigner.Decrypt(reply.Data, session.SessionKey))
+            ?? throw new InvalidOperationException("EIS receipt is empty.");
+
+        if (receipt.SubmitId != submitId)
+            throw new InvalidOperationException($"EIS receipt is for {receipt.SubmitId}, expected {submitId}.");
+
+        return receipt;
     }
 
     public async Task GetResults()

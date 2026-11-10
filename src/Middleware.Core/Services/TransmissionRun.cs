@@ -70,8 +70,12 @@ public class TransmissionRun(
     {
         try
         {
-            await eisClient.SubmitBatch(transmission.SubmitId, transmission.Invoices, ct);
-            transmission.MarkSent(clock.Now);
+            // A 2xx with an unreadable receipt throws here and leaves the transmission unchanged;
+            // the resend gets 409 and marks it Sent (without a reference number)
+            var receipt = await eisClient.SubmitBatch(transmission.SubmitId, transmission.Invoices, ct);
+            var now = clock.Now;
+            transmission.MarkSent(now);                          // sets SentAt
+            transmission.Acknowledge(receipt.ReferenceNo, now);  // sets ResponseAt + ReferenceNo
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
         {
@@ -94,7 +98,7 @@ public class TransmissionRun(
             throw;                                          // worker logs it; resent next cycle
         }
 
-        // Record Sent (2xx or 409)
+        // Record Acknowledged (2xx) or Sent (409)
         await unitOfWork.SaveChangesAsync(CancellationToken.None);
     }
 }
