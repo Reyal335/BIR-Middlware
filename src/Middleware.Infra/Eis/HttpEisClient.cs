@@ -40,7 +40,7 @@ public class HttpEisClient(
 
         var client = httpClientFactory.CreateClient("Eis");
 
-        var response = await client.PostAsJsonAsync(eisOpts.SubmitPath, new { submitId, data });
+        var response = await client.PostAsJsonAsync(eisOpts.SubmitPath, new { submitId, data }, ct);
         response.EnsureSuccessStatusCode();
 
     }

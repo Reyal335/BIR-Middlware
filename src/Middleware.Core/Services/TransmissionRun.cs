@@ -22,6 +22,12 @@ public class TransmissionRun(
 {
     public async Task ExecuteAsync(CancellationToken ct)
     {
+        // Resend unfinished batches first (Created = never confirmed sent, Uncertain = timeout/5xx/network),
+        // with their original submitId and stored signatures. If the EIS already has one it answers 409.
+        // A resend that throws stops the run: no point building new batches while the EIS is unreachable.
+        foreach (var pending in await transmissionRepository.FindUnfinishedAsync())
+            await SendAsync(pending, ct);
+
         // Get due invoices
         List<Invoice> invoices = await invoiceRepository.FindQueuedInvoices();
 
@@ -48,12 +54,23 @@ public class TransmissionRun(
             // Mark invoice as submitted
             invoice.MarkSubmitted();
 
-        // Submit Invoices
-        await eisClient.SubmitBatch(submitId, invoices, ct);
+        // Save BEFORE sending: the transmission (Created), its invoice links, the signatures and
+        // the Submitting status, in one transaction. From here on, a failed send is picked up by
+        // the resend loop above instead of being re-batched under a new submitId.
+        await unitOfWork.SaveChangesAsync(CancellationToken.None);
 
+        await SendAsync(transmission, ct);
+    }
+
+    /// <summary>
+    /// Sends one transmission and records the outcome. Saves use CancellationToken.None because
+    /// they record what already happened at the EIS and must not be skipped during shutdown.
+    /// </summary>
+    private async Task SendAsync(Transmission transmission, CancellationToken ct)
+    {
         try
         {
-            await eisClient.SubmitBatch(submitId, invoices, ct);
+            await eisClient.SubmitBatch(transmission.SubmitId, transmission.Invoices, ct);
             transmission.MarkSent(clock.Now);
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Conflict)
@@ -62,20 +79,22 @@ public class TransmissionRun(
         }
         catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.Unauthorized)
         {
-            throw;                                          // stays Created; resent next cycle
+            throw;                                          // status unchanged; resent next cycle
         }
         catch (HttpRequestException ex) when (ex.StatusCode is >= HttpStatusCode.BadRequest and < HttpStatusCode.InternalServerError)
         {
-            transmission.Fail(ex.Message);                  // permanent rejection
+            transmission.Fail(ex.Message);                  // permanent rejection: don't resend
+            await unitOfWork.SaveChangesAsync(CancellationToken.None);
+            throw;                                          // worker logs it; needs a person to look at it
         }
         catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException && !ct.IsCancellationRequested)
         {
             transmission.MarkUncertain(ex.Message);         // 5xx, timeout, network error
             await unitOfWork.SaveChangesAsync(CancellationToken.None);
-            throw;                                          // worker logs it
+            throw;                                          // worker logs it; resent next cycle
         }
 
-        // Save the signatures and the new statuses
+        // Record Sent (2xx or 409)
         await unitOfWork.SaveChangesAsync(CancellationToken.None);
     }
 }

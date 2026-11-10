@@ -22,13 +22,16 @@ public class Transmission
         Invoices = invoices
     };
 
-    public void MarkSent(DateTimeOffset Now)
+    public void MarkSent(DateTimeOffset now)
     {
         Status = TransmissionStatus.Sent;
+        SentAt = now;
     }
-    public void Acknowledge(DateTimeOffset Now)
+    public void Acknowledge(string referenceNo, DateTimeOffset now)
     {
         Status = TransmissionStatus.Acknowledged;
+        ResponseAt = now;
+        ReferenceNo = referenceNo;
     }
     public void MarkUncertain(string message)
     {
