@@ -53,7 +53,7 @@ public class InvoiceController(
         await intakeService.ReceiveInvocie(invoice);
         
 
-        return Ok(new { message = $"Here is your random word"});
+        return Ok(new { message = $"Invoices are received"});
     }
 
 }
